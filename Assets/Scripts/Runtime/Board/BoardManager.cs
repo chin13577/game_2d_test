@@ -10,18 +10,11 @@ namespace FS
     public class BoardManager : MonoBehaviour
     {
         [SerializeField] private int _bgSize = 5;
-        [SerializeField] private int _boardWidth = 15;
-        [SerializeField] private int _boardHeight = 15;
         [SerializeField] private TilemapDrawer _tilemapDrawer;
 
         public Bounds2D Bound { get => this._bound; }
         private Bounds2D _bound;
-
-        private void Start()
-        {
-            SetBoardSize(_boardWidth, _boardHeight);
-        }
-
+          
         public void SetBoardSize(int width, int height)
         {
             _bound = new Bounds2D(0, 0, width, height);
