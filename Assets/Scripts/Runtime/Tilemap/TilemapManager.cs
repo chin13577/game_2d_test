@@ -31,15 +31,6 @@ public class TilemapManager : MonoBehaviour
         this._cacheTileDict[position] = targetTile;
     }
 
-    private void ClearAllTiles()
-    {
-        foreach (KeyValuePair<Vector3Int, TileBase> item in this._cacheTileDict)
-        {
-            tileMap.SetTile(item.Key, null);
-        }
-        this._cacheTileDict.Clear();
-    }
-
     private TileBase GetTile(TileType tileType)
     {
         switch (tileType)
@@ -50,6 +41,15 @@ public class TilemapManager : MonoBehaviour
             default:
                 return groundTile;
         }
+    }
+    
+    public void ClearAllTiles()
+    {
+        foreach (KeyValuePair<Vector3Int, TileBase> item in this._cacheTileDict)
+        {
+            tileMap.SetTile(item.Key, null);
+        }
+        this._cacheTileDict.Clear();
     }
 
 }

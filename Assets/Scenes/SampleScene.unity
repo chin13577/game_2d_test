@@ -621,7 +621,7 @@ GameObject:
   - component: {fileID: 1942578662}
   - component: {fileID: 1942578661}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: TilemapManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -639,9 +639,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97c93364429072d40ada5c736cab5d7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightTile: {fileID: 0}
-  ruleTile: {fileID: 11400000, guid: 97d844055fdaa4e4cb7f89961cb3800e, type: 2}
-  highlightMap: {fileID: 1100826449}
+  groundTile: {fileID: 11400000, guid: 97d844055fdaa4e4cb7f89961cb3800e, type: 2}
+  wallTile: {fileID: 11400000, guid: d5c96289525ef654a9a4dcf03cdc8695, type: 2}
+  tileMap: {fileID: 1100826449}
 --- !u!4 &1942578662
 Transform:
   m_ObjectHideFlags: 0
