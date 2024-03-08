@@ -72,7 +72,7 @@ namespace FS
             Vector3 resultPos = isForceSet ? position : Vector3.Lerp(this.transform.position, position, smoothTime * Time.deltaTime);
 
             Vector3 calculatePos = this._pixelCamera.RoundToPixel(resultPos + _shakeCameraPosition);
-            this.transform.position = calculatePos;
+            this.transform.position = new Vector3(calculatePos.x, calculatePos.y, this.transform.position.z);
 
         }
 

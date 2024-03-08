@@ -31,6 +31,9 @@ public class CustomLinkedList<T> : LinkedList<T>
     public void FirstToLast()
     {
         LinkedListNode<T> first = this.First;
+        if (first == null)
+            return;
+
         RemoveFirst();
         this.AddLast(first);
     }
