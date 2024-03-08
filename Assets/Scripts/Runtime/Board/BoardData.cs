@@ -61,10 +61,10 @@ namespace FS
         public bool IsOutOfRange(int col, int row)
         {
             if (col < 0 || col >= _bound.w)
-                return false;
+                return true;
             else if (row < 0 || row >= _bound.h)
-                return false;
-            return true;
+                return true;
+            return false;
         }
 
         public BoardObject GetBoardObjectFromPosition(int posX, int posY)

@@ -14,11 +14,21 @@ namespace FS
         [SerializeField] private int _bgSize = 5;
         [SerializeField] private TilemapDrawer _tilemapDrawer;
 
+        [SerializeField] private Obstacle obstaclePrefab;
+        public FlexiblePooling<Obstacle> obstaclePooling;
+
         private BoardData _boardData = new BoardData();
 
         [Header("Debug")]
         [SerializeField] private int _debugX;
         [SerializeField] private int _debugY;
+
+        public void Init()
+        {
+            if (obstaclePooling == null)
+                obstaclePooling = new FlexiblePooling<Obstacle>(null, obstaclePrefab, 1);
+            obstaclePooling.HideAllObject();
+        }
 
         public void SetBoardSize(int width, int height)
         {
@@ -29,24 +39,43 @@ namespace FS
             DrawMap(width, height, TilemapDrawer.TileType.GROUND);
         }
 
-        public void GenerateObstacle()
+        public void GenerateObstacle(int amount)
         {
+            obstaclePooling.HideAllObject();
             _tilemapDrawer.ClearObstacleTiles();
-            //_boardData.SetObjectToBoard(14, 0, new GameObject());
-            //_boardData.SetObjectToBoard(14, 1, new GameObject());
 
+            RandomWeight<ObstacleData> randomWeight = new RandomWeight<ObstacleData>();
+            randomWeight.AddItem(new ObstacleData(1, 1), 20);
+            randomWeight.AddItem(new ObstacleData(1, 2), 10);
+            randomWeight.AddItem(new ObstacleData(2, 1), 10);
+            randomWeight.AddItem(new ObstacleData(2, 2), 5);
 
-            ////TODO: implement set obstacle.
-            //_tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(14, 0));
-            //_tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(14, 1));
+            for (int i = 0; i < amount; i++)
+            {
+                ObstacleData obstacleData = randomWeight.Random();
+
+                //TODO: find the valid place to spawn obstacle.
+                SpawnObstacle(UnityEngine.Random.Range(0, 16), UnityEngine.Random.Range(0, 16), obstacleData.Width, obstacleData.Height);
+            }
         }
 
         private void SpawnObstacle(int col, int row, int width, int height)
         {
             if (_boardData.IsOutOfRange(col, row, width, height))
                 return;
-            _boardData.SetObjectToBoard(col, row, new GameObject());
-            _tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(col, row));
+
+            Obstacle obstacle = obstaclePooling.GetObject();
+            obstacle.gameObject.SetActive(true);
+            obstacle.SetData(new ObstacleData(width, height));
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    _boardData.SetObjectToBoard(col + j, row + i, obstacle.gameObject);
+                    _tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(col + j, row + i));
+                }
+            }
         }
 
         [ContextMenu("TestDebugPosition")]

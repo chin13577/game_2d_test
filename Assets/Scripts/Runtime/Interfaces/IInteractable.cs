@@ -9,5 +9,6 @@ namespace FS
         /// </summary>
         /// <param name="user">represent to who are interact with this object</param>
         public void Interact(GameObject user);
+
     }
 }

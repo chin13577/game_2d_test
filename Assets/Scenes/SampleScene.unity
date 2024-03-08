@@ -318,6 +318,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bgSize: 5
   _tilemapDrawer: {fileID: 879999984}
+  _debugX: 0
+  _debugY: 0
 --- !u!4 &562622400
 Transform:
   m_ObjectHideFlags: 0
