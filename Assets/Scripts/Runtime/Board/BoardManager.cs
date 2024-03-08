@@ -7,13 +7,14 @@ using static FS.Util.Bounds2D;
 
 namespace FS
 {
+
     public class BoardManager : MonoBehaviour
     {
+        public static readonly Vector3 TileImgPivot = new Vector2(0.5f, 0.5f);
         [SerializeField] private int _bgSize = 5;
         [SerializeField] private TilemapDrawer _tilemapDrawer;
 
-        public Bounds2D Bound { get => this._bound; }
-        private Bounds2D _bound;
+        private BoardData _boardData = new BoardData();
 
         [Header("Debug")]
         [SerializeField] private int _debugX;
@@ -21,7 +22,7 @@ namespace FS
 
         public void SetBoardSize(int width, int height)
         {
-            _bound = new Bounds2D(0, 0, width, height);
+            _boardData.Init(width, height);
 
             _tilemapDrawer.ClearAllTiles();
             DrawMap(width + _bgSize, height + _bgSize, TilemapDrawer.TileType.WALL);
@@ -31,12 +32,21 @@ namespace FS
         public void GenerateObstacle()
         {
             _tilemapDrawer.ClearObstacleTiles();
+            //_boardData.SetObjectToBoard(14, 0, new GameObject());
+            //_boardData.SetObjectToBoard(14, 1, new GameObject());
 
-            //TODO: implement set obstacle.
-            _tilemapDrawer.SetObstacle(new Vector3Int(4, 5));
-            _tilemapDrawer.SetObstacle(new Vector3Int(4, 6));
-            _tilemapDrawer.SetObstacle(new Vector3Int(5, 5));
-            _tilemapDrawer.SetObstacle(new Vector3Int(5, 6));
+
+            ////TODO: implement set obstacle.
+            //_tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(14, 0));
+            //_tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(14, 1));
+        }
+
+        private void SpawnObstacle(int col, int row, int width, int height)
+        {
+            if (_boardData.IsOutOfRange(col, row, width, height))
+                return;
+            _boardData.SetObjectToBoard(col, row, new GameObject());
+            _tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(col, row));
         }
 
         [ContextMenu("TestDebugPosition")]
@@ -49,13 +59,10 @@ namespace FS
 
         public Vector3 GetCenterTilePosition(int x, int y)
         {
-            AnchorBounds2D anchor = _bound.Anchor;
-            float spriteCenterPivot = 0.5f;
-            int offsetX = Convert.ToInt32(anchor.centerLeft.x - _bound.Center.x);
-            int offsetY = Convert.ToInt32(anchor.centerTop.y - _bound.Center.y);
-
             // I've to -y because anchor of [0,0] is start at TopLeft.
-            return new Vector3(x + offsetX + spriteCenterPivot, -y + offsetY + spriteCenterPivot);
+            int posX = x + _boardData.BoardOffsetX;
+            int posY = -y + _boardData.BoardOffsetY;
+            return new Vector3(posX, posY) + TileImgPivot;
         }
 
         private void DrawMap(int width, int height, TilemapDrawer.TileType type)
@@ -68,8 +75,11 @@ namespace FS
             {
                 for (int j = 0; j < width; j++)
                 {
+                    int x = j + offsetX;
+
                     // I've to -i because anchor of [0,0] is start at TopLeft.
-                    _tilemapDrawer.SetBGTile(new Vector3Int(j + offsetX, -i + offsetY), type);
+                    int y = -i + offsetY;
+                    _tilemapDrawer.SetBGTile(new Vector3Int(x, y), type);
                 }
             }
         }
