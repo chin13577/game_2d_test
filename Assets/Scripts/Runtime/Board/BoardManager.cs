@@ -15,6 +15,10 @@ namespace FS
         public Bounds2D Bound { get => this._bound; }
         private Bounds2D _bound;
 
+        [Header("Debug")]
+        [SerializeField] private int _debugX;
+        [SerializeField] private int _debugY;
+
         public void SetBoardSize(int width, int height)
         {
             _bound = new Bounds2D(0, 0, width, height);
@@ -22,6 +26,25 @@ namespace FS
             _tilemapDrawer.ClearAllTiles();
             DrawMap(width + _bgSize, height + _bgSize, TilemapDrawer.TileType.WALL);
             DrawMap(width, height, TilemapDrawer.TileType.GROUND);
+        }
+
+        public void GenerateObstacle()
+        {
+            _tilemapDrawer.ClearObstacleTiles();
+
+            //TODO: implement set obstacle.
+            _tilemapDrawer.SetObstacle(new Vector3Int(4, 5));
+            _tilemapDrawer.SetObstacle(new Vector3Int(4, 6));
+            _tilemapDrawer.SetObstacle(new Vector3Int(5, 5));
+            _tilemapDrawer.SetObstacle(new Vector3Int(5, 6));
+        }
+
+        [ContextMenu("TestDebugPosition")]
+        public void DebugTilePosition()
+        {
+            //TODO: wait for delete;
+            Vector3 pos = GetCenterTilePosition(this._debugX, this._debugY);
+            Debug.Log(pos.x + " " + pos.y);
         }
 
         public Vector3 GetCenterTilePosition(int x, int y)
@@ -46,7 +69,7 @@ namespace FS
                 for (int j = 0; j < width; j++)
                 {
                     // I've to -i because anchor of [0,0] is start at TopLeft.
-                    _tilemapDrawer.SetTile(new Vector3Int(j + offsetX, -i + offsetY), type);
+                    _tilemapDrawer.SetBGTile(new Vector3Int(j + offsetX, -i + offsetY), type);
                 }
             }
         }

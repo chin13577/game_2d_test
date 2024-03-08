@@ -16,6 +16,7 @@ namespace FS
         void Start()
         {
             _boardManager.SetBoardSize(_boardWidth, _boardHeight);
+            _boardManager.GenerateObstacle();
         }
 
     }
