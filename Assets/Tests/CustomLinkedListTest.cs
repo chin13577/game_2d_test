@@ -1,11 +1,12 @@
 using System.Collections;
+using FS.Test;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class CustomLinkedListTest : MonoBehaviour
+namespace FS.Test
 {
-    private class TestHero
+    public class TestHero
     {
         public string id;
         public TestHero(string id)
@@ -13,7 +14,10 @@ public class CustomLinkedListTest : MonoBehaviour
             this.id = id;
         }
     }
+}
 
+public class CustomLinkedListTest : MonoBehaviour
+{
     // A Test behaves as an ordinary method
     [Test]
     public void TestFind()
@@ -91,9 +95,26 @@ public class CustomLinkedListTest : MonoBehaviour
         {
             Debug.Log(item.id);
         }
-        Assert.AreEqual(heroList.First.Value.id, "B");
-        Assert.AreEqual(heroList.Last.Value.id, "A");
+        Assert.AreEqual("B", heroList.First.Value.id);
+        Assert.AreEqual("A", heroList.Last.Value.id);
     }
+
+    [Test]
+    public void TestFirstToLastWithEmptyValue()
+    {
+        CustomLinkedList<TestHero> heroList = new CustomLinkedList<TestHero>();
+        heroList.FirstToLast();
+        Assert.AreEqual(null, heroList.First);
+    }
+    [Test]
+    public void TestFirstToLastWithOneValue()
+    {
+        CustomLinkedList<TestHero> heroList = new CustomLinkedList<TestHero>();
+        heroList.AddLast(new TestHero("A"));
+        heroList.FirstToLast();
+        Assert.AreEqual("A", heroList.First.Value.id);
+    }
+
     //// A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     //// `yield return null;` to skip a frame.
     //[UnityTest]
