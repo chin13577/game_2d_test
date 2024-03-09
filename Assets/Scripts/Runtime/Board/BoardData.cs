@@ -15,7 +15,7 @@ namespace FS
         // (3,0) (3,1) (3,2)
 
         public BoardObject[,] BoardObjectArr { get; private set; }
-
+        public static readonly Vector3 TileImgPivot = new Vector2(0.5f, 0.5f);
         public Bounds2D Bound { get => this._bound; }
         private Bounds2D _bound;
         public int BoardOffsetX { get; private set; }
@@ -60,7 +60,7 @@ namespace FS
             {
                 for (int j = 0; j < width; j++)
                 {
-                    BoardObjectArr[i, j] = new BoardObject();
+                    BoardObjectArr[i, j] = new BoardObject(j, i, GetCenterTilePosition(j, i));
                 }
             }
         }
@@ -87,15 +87,30 @@ namespace FS
             return false;
         }
 
+        public BoardObject GetBoardObjectFromPosition(Vector3 position)
+        {
+            Vector3Int posInt = position.ToVector3Int();
+            return GetBoardObjectFromPosition(posInt.x, posInt.y);
+        }
+
         public BoardObject GetBoardObjectFromPosition(int posX, int posY)
         {
             Vector3Int arrCoordinate = ConvertWorldPosToArrayPos(posX, posY);
+            Debug.Log(arrCoordinate.x + " " + arrCoordinate.y);
             if (IsOutOfRange(arrCoordinate.x, arrCoordinate.y))
                 return null;
 
             int row = arrCoordinate.y;
             int col = arrCoordinate.x;
             return BoardObjectArr[row, col];
+        }
+
+        public Vector3 GetCenterTilePosition(int col, int row)
+        {
+            // I've to -y because anchor of [0,0] is start at TopLeft.
+            int posX = col + this.BoardOffsetX;
+            int posY = -row + this.BoardOffsetY;
+            return new Vector3(posX, posY) + TileImgPivot;
         }
 
         public Vector3Int ConvertWorldPosToArrayPos(int posX, int posY)
@@ -116,7 +131,21 @@ namespace FS
         {
             if (IsOutOfRange(col, row))
                 return;
-            BoardObjectArr[row, col].SetData(obj);
+            BoardObjectArr[row, col].SetObject(obj);
+        }
+
+        public List<BoardObject> GetAllEmptySlots()
+        {
+            List<BoardObject> result = new List<BoardObject>();
+            for (int i = 0; i < BoardObjectArr.GetLength(0); i++)
+            {
+                for (int j = 0; j < BoardObjectArr.GetLength(1); j++)
+                {
+                    if (BoardObjectArr[i, j].IsEmpty)
+                        result.Add(BoardObjectArr[i, j]);
+                }
+            }
+            return result;
         }
 
         public List<Bounds2D> GetAllEmptyBound(int width, int height)

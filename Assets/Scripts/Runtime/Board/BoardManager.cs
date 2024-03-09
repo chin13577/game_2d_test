@@ -9,7 +9,6 @@ namespace FS
 
     public class BoardManager : MonoBehaviour
     {
-        public static readonly Vector3 TileImgPivot = new Vector2(0.5f, 0.5f);
         [SerializeField] private int _bgSize = 5;
 
         public TilemapDrawer TilemapDrawer { get => _tilemapDrawer; }
@@ -56,16 +55,8 @@ namespace FS
         public void DebugTilePosition()
         {
             //TODO: wait for delete;
-            Vector3 pos = GetCenterTilePosition(this._debugX, this._debugY);
+            Vector3 pos = _boardData.GetCenterTilePosition(this._debugX, this._debugY);
             Debug.Log(pos.x + " " + pos.y);
-        }
-
-        public Vector3 GetCenterTilePosition(int x, int y)
-        {
-            // I've to -y because anchor of [0,0] is start at TopLeft.
-            int posX = x + _boardData.BoardOffsetX;
-            int posY = -y + _boardData.BoardOffsetY;
-            return new Vector3(posX, posY) + TileImgPivot;
         }
 
         private void DrawMap(int width, int height, TilemapDrawer.TileType type)

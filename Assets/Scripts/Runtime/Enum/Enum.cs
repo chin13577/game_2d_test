@@ -6,3 +6,9 @@ public enum Direction
     Down,
     Left
 }
+
+public enum Team
+{
+    PLAYER,
+    ENEMY
+}

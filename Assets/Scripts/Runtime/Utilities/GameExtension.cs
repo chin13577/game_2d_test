@@ -99,4 +99,9 @@ public static class GameExtension
         return result;
     }
 
+    public static int ToInt32(this float value)
+    {
+        return System.Convert.ToInt32(value);
+    }
+
 }
