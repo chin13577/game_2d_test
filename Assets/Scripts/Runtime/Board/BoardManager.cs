@@ -1,7 +1,6 @@
 using FS.Util;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using static FS.Util.Bounds2D;
 
@@ -12,22 +11,26 @@ namespace FS
     {
         public static readonly Vector3 TileImgPivot = new Vector2(0.5f, 0.5f);
         [SerializeField] private int _bgSize = 5;
+
+        public TilemapDrawer TilemapDrawer { get => _tilemapDrawer; }
         [SerializeField] private TilemapDrawer _tilemapDrawer;
 
+        public Obstacle ObstaclePrefab { get => obstaclePrefab; }
         [SerializeField] private Obstacle obstaclePrefab;
-        public FlexiblePooling<Obstacle> obstaclePooling;
 
+        private ObstacleGenerator _obstacleGenerator;
+
+        public BoardData BoardData { get => _boardData; }
         private BoardData _boardData = new BoardData();
 
         [Header("Debug")]
         [SerializeField] private int _debugX;
         [SerializeField] private int _debugY;
 
+
         public void Init()
         {
-            if (obstaclePooling == null)
-                obstaclePooling = new FlexiblePooling<Obstacle>(null, obstaclePrefab, 1);
-            obstaclePooling.HideAllObject();
+            _obstacleGenerator = new ObstacleGenerator(this);
         }
 
         public void SetBoardSize(int width, int height)
@@ -38,44 +41,15 @@ namespace FS
             DrawMap(width + _bgSize, height + _bgSize, TilemapDrawer.TileType.WALL);
             DrawMap(width, height, TilemapDrawer.TileType.GROUND);
         }
-
-        public void GenerateObstacle(int amount)
+        public void ClearData()
         {
-            obstaclePooling.HideAllObject();
-            _tilemapDrawer.ClearObstacleTiles();
-
-            RandomWeight<ObstacleData> randomWeight = new RandomWeight<ObstacleData>();
-            randomWeight.AddItem(new ObstacleData(1, 1), 20);
-            randomWeight.AddItem(new ObstacleData(1, 2), 10);
-            randomWeight.AddItem(new ObstacleData(2, 1), 10);
-            randomWeight.AddItem(new ObstacleData(2, 2), 5);
-
-            for (int i = 0; i < amount; i++)
-            {
-                ObstacleData obstacleData = randomWeight.Random();
-
-                //TODO: find the valid place to spawn obstacle.
-                SpawnObstacle(UnityEngine.Random.Range(0, 16), UnityEngine.Random.Range(0, 16), obstacleData.Width, obstacleData.Height);
-            }
+            _boardData.ClearAll();
         }
-
-        private void SpawnObstacle(int col, int row, int width, int height)
+        public void GenerateObstacle(float ratio)
         {
-            if (_boardData.IsOutOfRange(col, row, width, height))
-                return;
-
-            Obstacle obstacle = obstaclePooling.GetObject();
-            obstacle.gameObject.SetActive(true);
-            obstacle.SetData(new ObstacleData(width, height));
-
-            for (int i = 0; i < height; i++)
-            {
-                for (int j = 0; j < width; j++)
-                {
-                    _boardData.SetObjectToBoard(col + j, row + i, obstacle.gameObject);
-                    _tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(col + j, row + i));
-                }
-            }
+            _obstacleGenerator.HideAllObject();
+            _tilemapDrawer.ClearObstacleTiles();
+            _obstacleGenerator.GenerateObstacle(ratio, _boardData.TotalSize);
         }
 
         [ContextMenu("TestDebugPosition")]

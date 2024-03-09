@@ -12,13 +12,21 @@ namespace FS
         [Header("Config")]
         [SerializeField] private int _boardWidth = 16;
         [SerializeField] private int _boardHeight = 16;
+        [Range(0, 1f)] public float ObstacleRatio = 0.1f;
         // Start is called before the first frame update
         void Start()
         {
             _boardManager.Init();
             _boardManager.SetBoardSize(_boardWidth, _boardHeight);
-            _boardManager.GenerateObstacle(6);
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _boardManager.ClearData();
+                _boardManager.GenerateObstacle(ObstacleRatio);
+            }
+        }
     }
 }

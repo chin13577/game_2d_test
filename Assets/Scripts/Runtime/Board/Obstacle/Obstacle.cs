@@ -9,9 +9,16 @@ namespace FS
     {
         private ObstacleData _data;
 
+        [Header("Debug")]
+        [SerializeField] private int col;
+        [SerializeField] private int row;
+
         public void SetData(ObstacleData data)
         {
             this._data = data;
+
+            this.col = data.Col;
+            this.row = data.Row;
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using FS.Util;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static FS.Util.Bounds2D;
 
@@ -15,13 +16,21 @@ namespace FS
 
         public BoardObject[,] BoardObjectArr { get; private set; }
 
-
         public Bounds2D Bound { get => this._bound; }
         private Bounds2D _bound;
         public int BoardOffsetX { get; private set; }
         public int BoardOffsetY { get; private set; }
 
         //Dictionary<Vector3Int, BoardObject> LandDict = new Dictionary<Vector3Int, BoardObject>();
+        public int TotalSize
+        {
+            get
+            {
+                if (BoardObjectArr == null)
+                    return 0;
+                return BoardObjectArr.Length;
+            }
+        }
 
         public void Init(int width, int height)
         {
@@ -31,6 +40,17 @@ namespace FS
             this.BoardOffsetY = Convert.ToInt32(anchor.centerTop.y - _bound.Center.y);
 
             InitBoardObj(width, height);
+        }
+
+        public void ClearAll()
+        {
+            for (int i = 0; i < BoardObjectArr.GetLength(0); i++)
+            {
+                for (int j = 0; j < BoardObjectArr.GetLength(1); j++)
+                {
+                    BoardObjectArr[i, j].Clear();
+                }
+            }
         }
 
         private void InitBoardObj(int width, int height)
@@ -99,5 +119,39 @@ namespace FS
             BoardObjectArr[row, col].SetData(obj);
         }
 
+        public List<Bounds2D> GetAllEmptyBound(int width, int height)
+        {
+            List<Bounds2D> result = new List<Bounds2D>();
+            for (int i = 0; i < BoardObjectArr.GetLength(0); i++)
+            {
+                for (int j = 0; j < BoardObjectArr.GetLength(1); j++)
+                {
+                    if (IsAvailableBound(j, i, width, height) == true)
+                    {
+                        result.Add(new Bounds2D(j, i, width, height));
+                    }
+                }
+            }
+            return result;
+        }
+        public bool IsAvailableBound(Bounds2D bound)
+        {
+            return IsAvailableBound((int)bound.x, (int)bound.y, (int)bound.w, (int)bound.h);
+        }
+        public bool IsAvailableBound(int col, int row, int width, int height)
+        {
+            if (IsOutOfRange(col, row, width, height) == true)
+                return false;
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (BoardObjectArr[row + i, col + j].IsEmpty == false)
+                        return false;
+                }
+            }
+            return true;
+        }
     }
 }
