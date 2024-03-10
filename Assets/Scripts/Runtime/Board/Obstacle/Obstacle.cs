@@ -5,7 +5,7 @@ using UnityEngine;
 namespace FS
 {
 
-    public class Obstacle : MonoBehaviour, IBoardObject
+    public class Obstacle : MonoBehaviour, ISlotInfo
     {
         private ObstacleData _data;
 

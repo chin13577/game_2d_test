@@ -2,7 +2,7 @@
 
 namespace FS
 {
-    public interface IBoardObject
+    public interface ISlotInfo
     {
         public Team Team { get; }
         public GameObject gameObject { get; }

@@ -1,8 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace FS
 {
+    public enum HitResult
+    {
+        HIT_WALL,
+        HIT_OWN_SNAKE_PART,
+        HIT_ENEMY
+    }
+    public struct InteractResult
+    {
+
+    }
     public class PlayerSnake
     {
         private BoardManager _boardManager;
@@ -41,9 +52,31 @@ namespace FS
                 character.Previous = last;
 
                 character.CurrentPosition = last.CurrentPosition + last.LastDirection.Inverse().ToVector3();
-                BoardObject newBoard = this._boardData.GetBoardObjectFromPosition(character.CurrentPosition);
-                newBoard.SetObject(character);
+                SlotInfo newSlot = this._boardData.GetSlotFromPosition(character.CurrentPosition);
+                newSlot.SetObject(character);
             }
+        }
+        public bool TryMove(Direction playerInputDir)
+        {
+            // SlotInfo nextBoardObject = GetNextBoardObject(playerInputDir);
+
+
+            IInteractable interactObject = InteractNextObject(playerInputDir);
+
+            MoveToNewSlot(playerInputDir);
+            if (interactObject != null)
+            {
+                PostInteractNextObject(interactObject);
+            }
+            return true;
+        }
+
+        SlotInfo GetNextBoardObject(Direction dir)
+        {
+            Character head = characterList.First.Value;
+            Vector3 nextPos = head.CurrentPosition + dir.ToVector3();
+            Vector3Int arrCoordinate = this._boardData.ConvertWorldPosToArrayPos(nextPos);
+            return this._boardData.GetSlot(arrCoordinate.x, arrCoordinate.y);
         }
 
         public IInteractable InteractNextObject(Direction dir)
@@ -53,7 +86,7 @@ namespace FS
             Character head = characterList.First.Value;
             Vector3 nextPos = head.CurrentPosition + dir.ToVector3();
             Vector3Int arrCoordinate = this._boardData.ConvertWorldPosToArrayPos(nextPos);
-            BoardObject nextBoardObject = this._boardData.GetBoardObject(arrCoordinate.x, arrCoordinate.y);
+            SlotInfo nextBoardObject = this._boardData.GetSlot(arrCoordinate.x, arrCoordinate.y);
             if (this._boardData.IsOutOfRange(arrCoordinate.x, arrCoordinate.y) || nextBoardObject.IsObstacle)
             {
                 // remove head
@@ -83,7 +116,7 @@ namespace FS
 
             do
             {
-                BoardObject boardObj = this._boardData.GetBoardObjectFromPosition(current.CurrentPosition);
+                SlotInfo boardObj = this._boardData.GetSlotFromPosition(current.CurrentPosition);
                 boardObj.Clear();
 
                 if (current.Next)
@@ -91,11 +124,12 @@ namespace FS
                 current.CurrentDirection = (current == head) ? dir : current.NextDirection;
                 current.Move(current.CurrentDirection);
 
-                BoardObject newBoard = this._boardData.GetBoardObjectFromPosition(current.CurrentPosition);
+                SlotInfo newBoard = this._boardData.GetSlotFromPosition(current.CurrentPosition);
                 newBoard.SetObject(current);
 
                 current = current.Next;
             } while (current != null);
         }
+
     }
 }

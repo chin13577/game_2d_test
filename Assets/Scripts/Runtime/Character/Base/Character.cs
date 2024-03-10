@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace FS
 {
-    public abstract class Character : MonoBehaviour, IBoardObject
+    public abstract class Character : MonoBehaviour, ISlotInfo
     {
         public Character Previous;
         public Character Next;

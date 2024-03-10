@@ -113,7 +113,7 @@ namespace FS
                 _boardManager.ClearData();
                 _boardManager.GenerateObstacle(ObstacleRatio);
 
-                List<BoardObject> emptySlotList = _boardManager.BoardData.GetAllEmptySlots();
+                List<SlotInfo> emptySlotList = _boardManager.BoardData.GetAllEmptySlots();
                 emptySlotList.Shuffle();
 
                 Hero hero = RandomSpawnHero(emptySlotList);
@@ -144,26 +144,21 @@ namespace FS
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                IInteractable nextBoardObject = PlayerSnake.InteractNextObject(playerInputDir);
+                PlayerSnake.TryMove(playerInputDir);
                 if (_currentState.GameStateType == GameState.NORMAL)
                 {
-                    PlayerSnake.MoveToNewSlot(playerInputDir);
-                    if (nextBoardObject != null)
-                    {
-                        PlayerSnake.PostInteractNextObject(nextBoardObject);
-                    }
                 }
             }
         }
 
-        private Hero RandomSpawnHero(List<BoardObject> emptySlotList)
+        private Hero RandomSpawnHero(List<SlotInfo> emptySlotList)
         {
-            BoardObject boardObject = emptySlotList[0];
+            SlotInfo slot = emptySlotList[0];
             emptySlotList.RemoveAt(0);
 
             Hero hero = Instantiate(characterPrefab).GetComponent<Hero>();
-            hero.CurrentPosition = boardObject.WorldPos;
-            boardObject.SetObject(hero);
+            hero.CurrentPosition = slot.WorldPos;
+            slot.SetObject(hero);
 
             return hero;
         }

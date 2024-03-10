@@ -14,7 +14,7 @@ namespace FS
         // (2,0) (2,1) (2,2)
         // (3,0) (3,1) (3,2)
 
-        public BoardObject[,] BoardObjectArr { get; private set; }
+        public SlotInfo[,] SlotArr { get; private set; }
         public static readonly Vector3 TileImgPivot = new Vector2(0.5f, 0.5f);
         public Bounds2D Bound { get => this._bound; }
         private Bounds2D _bound;
@@ -26,9 +26,9 @@ namespace FS
         {
             get
             {
-                if (BoardObjectArr == null)
+                if (SlotArr == null)
                     return 0;
-                return BoardObjectArr.Length;
+                return SlotArr.Length;
             }
         }
 
@@ -39,28 +39,28 @@ namespace FS
             this.BoardOffsetX = Convert.ToInt32(anchor.centerLeft.x - _bound.Center.x);
             this.BoardOffsetY = Convert.ToInt32(anchor.centerTop.y - _bound.Center.y);
 
-            InitBoardObj(width, height);
+            InitSlotList(width, height);
         }
 
         public void ClearAll()
         {
-            for (int i = 0; i < BoardObjectArr.GetLength(0); i++)
+            for (int i = 0; i < SlotArr.GetLength(0); i++)
             {
-                for (int j = 0; j < BoardObjectArr.GetLength(1); j++)
+                for (int j = 0; j < SlotArr.GetLength(1); j++)
                 {
-                    BoardObjectArr[i, j].Clear();
+                    SlotArr[i, j].Clear();
                 }
             }
         }
 
-        private void InitBoardObj(int width, int height)
+        private void InitSlotList(int width, int height)
         {
-            BoardObjectArr = new BoardObject[width, height];
+            SlotArr = new SlotInfo[width, height];
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
-                    BoardObjectArr[i, j] = new BoardObject(j, i, GetCenterTilePosition(j, i));
+                    SlotArr[i, j] = new SlotInfo(j, i, GetCenterTilePosition(j, i));
                 }
             }
         }
@@ -87,15 +87,15 @@ namespace FS
             return false;
         }
 
-        public BoardObject GetBoardObject(int col, int row)
+        public SlotInfo GetSlot(int col, int row)
         {
             if (IsOutOfRange(col, row))
                 return null;
 
-            return BoardObjectArr[row, col];
+            return SlotArr[row, col];
         }
 
-        public BoardObject GetBoardObjectFromPosition(Vector3 position)
+        public SlotInfo GetSlotFromPosition(Vector3 position)
         {
             Vector3Int arrCoordinate = ConvertWorldPosToArrayPos(position);
             if (IsOutOfRange(arrCoordinate.x, arrCoordinate.y))
@@ -103,7 +103,7 @@ namespace FS
 
             int row = arrCoordinate.y;
             int col = arrCoordinate.x;
-            return BoardObjectArr[row, col];
+            return SlotArr[row, col];
         }
 
         public Vector3 GetCenterTilePosition(int col, int row)
@@ -129,22 +129,22 @@ namespace FS
             return new Vector3Int(posX, posY);
         }
 
-        public void SetObjectToBoard(int col, int row, IBoardObject obj)
+        public void SetObjectToSlot(int col, int row, ISlotInfo obj)
         {
             if (IsOutOfRange(col, row))
                 return;
-            BoardObjectArr[row, col].SetObject(obj);
+            SlotArr[row, col].SetObject(obj);
         }
 
-        public List<BoardObject> GetAllEmptySlots()
+        public List<SlotInfo> GetAllEmptySlots()
         {
-            List<BoardObject> result = new List<BoardObject>();
-            for (int i = 0; i < BoardObjectArr.GetLength(0); i++)
+            List<SlotInfo> result = new List<SlotInfo>();
+            for (int i = 0; i < SlotArr.GetLength(0); i++)
             {
-                for (int j = 0; j < BoardObjectArr.GetLength(1); j++)
+                for (int j = 0; j < SlotArr.GetLength(1); j++)
                 {
-                    if (BoardObjectArr[i, j].IsEmpty)
-                        result.Add(BoardObjectArr[i, j]);
+                    if (SlotArr[i, j].IsEmpty)
+                        result.Add(SlotArr[i, j]);
                 }
             }
             return result;
@@ -153,9 +153,9 @@ namespace FS
         public List<Bounds2D> GetAllEmptyBound(int width, int height)
         {
             List<Bounds2D> result = new List<Bounds2D>();
-            for (int i = 0; i < BoardObjectArr.GetLength(0); i++)
+            for (int i = 0; i < SlotArr.GetLength(0); i++)
             {
-                for (int j = 0; j < BoardObjectArr.GetLength(1); j++)
+                for (int j = 0; j < SlotArr.GetLength(1); j++)
                 {
                     if (IsAvailableBound(j, i, width, height) == true)
                     {
@@ -178,7 +178,7 @@ namespace FS
             {
                 for (int j = 0; j < width; j++)
                 {
-                    if (BoardObjectArr[row + i, col + j].IsEmpty == false)
+                    if (SlotArr[row + i, col + j].IsEmpty == false)
                         return false;
                 }
             }
