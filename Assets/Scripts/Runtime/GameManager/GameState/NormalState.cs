@@ -28,16 +28,19 @@
             if (result == ExecuteResult.HIT_ENEMY)
             {
                 // goto battle state.
+                _manager.ChangeState(GameState.BATTLE);
             }
             else if (result == ExecuteResult.HIT_OWN_SNAKE_PART)
             {
                 // goto result state.
+                _manager.ChangeState(GameState.RESULT);
             }
             else if (result == ExecuteResult.HIT_WALL)
             {
                 if (_playerSnake.Count == 1)
                 {
                     //goto result state
+                    _manager.ChangeState(GameState.RESULT);
                 }
             }
         }

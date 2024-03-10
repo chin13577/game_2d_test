@@ -16,6 +16,7 @@ public enum Team
 
 public enum GameState
 {
+    PREPARE,
     NORMAL,
     BATTLE,
     RESULT
