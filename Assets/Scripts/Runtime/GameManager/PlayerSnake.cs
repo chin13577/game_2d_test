@@ -4,22 +4,22 @@ using UnityEngine;
 
 namespace FS
 {
-    public enum HitResult
+    public enum ExecuteResult
     {
         HIT_WALL,
         HIT_OWN_SNAKE_PART,
-        HIT_ENEMY
+        HIT_ENEMY,
+        PASS
     }
-    public struct InteractResult
-    {
 
-    }
     public class PlayerSnake
     {
         private BoardManager _boardManager;
         private BoardData _boardData;
 
         private CustomLinkedList<Character> characterList = new CustomLinkedList<Character>();
+
+        private Action<Character> OnUpdateHead;
 
         public Character Head
         {
@@ -31,6 +31,8 @@ namespace FS
             }
         }
 
+        public int Count { get => characterList.Count; }
+
         public PlayerSnake(GameManager gameManager)
         {
             this._boardManager = gameManager.BoardManager;
@@ -38,9 +40,27 @@ namespace FS
 
         }
 
+        public void SetOnUpdateHead(Action<Character> callback)
+        {
+            OnUpdateHead = callback;
+        }
+        public void RemoveHead()
+        {
+            if (Count == 0)
+                return;
+
+            Character character = Head;
+            SlotInfo currentSlot = this._boardData.GetSlotFromPosition(character.CurrentPosition);
+            currentSlot.Clear();
+            //TODO: implement pooling.
+            character.gameObject.SetActive(false);
+            characterList.RemoveFirst();
+
+            OnUpdateHead?.Invoke(Head);
+        }
         public void AddCharacter(Character character)
         {
-            if (characterList.Count == 0)
+            if (Count == 0)
             {
                 characterList.AddFirst(character);
             }
@@ -56,57 +76,88 @@ namespace FS
                 newSlot.SetObject(character);
             }
         }
-        public bool TryMove(Direction playerInputDir)
+
+        private bool IsCanMoveToDirection(Direction direction)
         {
-            // SlotInfo nextBoardObject = GetNextBoardObject(playerInputDir);
-
-
-            IInteractable interactObject = InteractNextObject(playerInputDir);
-
-            MoveToNewSlot(playerInputDir);
-            if (interactObject != null)
+            if (Count == 0)
+                return false;
+            else if (Count == 1)
+                return true;
+            else
             {
-                PostInteractNextObject(interactObject);
+                Vector3 nextPos = Head.CurrentPosition + direction.ToVector3();
+                if (Head.Next.CurrentPosition == nextPos)
+                    return false;
+                else
+                    return true;
             }
-            return true;
         }
-
-        SlotInfo GetNextBoardObject(Direction dir)
+        public ExecuteResult ExecuteAndMove(Direction playerInputDir)
         {
-            Character head = characterList.First.Value;
-            Vector3 nextPos = head.CurrentPosition + dir.ToVector3();
-            Vector3Int arrCoordinate = this._boardData.ConvertWorldPosToArrayPos(nextPos);
-            return this._boardData.GetSlot(arrCoordinate.x, arrCoordinate.y);
-        }
-
-        public IInteractable InteractNextObject(Direction dir)
-        {
-            if (characterList.First == null)
-                return null;
-            Character head = characterList.First.Value;
-            Vector3 nextPos = head.CurrentPosition + dir.ToVector3();
-            Vector3Int arrCoordinate = this._boardData.ConvertWorldPosToArrayPos(nextPos);
-            SlotInfo nextBoardObject = this._boardData.GetSlot(arrCoordinate.x, arrCoordinate.y);
-            if (this._boardData.IsOutOfRange(arrCoordinate.x, arrCoordinate.y) || nextBoardObject.IsObstacle)
+            if (IsCanMoveToDirection(playerInputDir) == false)
             {
-                // remove head
-                if (characterList.Count == 0)
+                playerInputDir = Head.CurrentDirection;
+            }
+            SlotInfo nextSlot = GetNextSlot(playerInputDir);
+            if (nextSlot == null || nextSlot.IsObstacle)
+            {
+                if (characterList.Count == 1)
                 {
-                    // dead.
-                    return null;
+                    // dead. do nothing.
                 }
+                else
+                {
+                    Direction dir = Head.CurrentDirection;
+                    RemoveHead();
+                    MoveToNewSlot(dir);
+                }
+                return ExecuteResult.HIT_WALL;
             }
-            else if (nextBoardObject.IsCanInteract)
+            else if (nextSlot.IsHasObject && nextSlot.Obj.Team == Team.ENEMY)
             {
-                nextBoardObject.Interactable.Interact(head.gameObject);
-                return nextBoardObject.Interactable;
+                return ExecuteResult.HIT_ENEMY;
             }
-            return null;
+            else if (nextSlot.IsCanInteract)
+            {
+                if (IsSnakePart(nextSlot.Obj))
+                {
+                    return ExecuteResult.HIT_OWN_SNAKE_PART;
+                }
+                Character head = characterList.First.Value;
+                IInteractable interactable = nextSlot.Interactable;
+                interactable.Interact(head.gameObject);
+
+                MoveToNewSlot(playerInputDir);
+                interactable.PostInteract(head.gameObject);
+                return ExecuteResult.PASS;
+            }
+            else
+            {
+                MoveToNewSlot(playerInputDir);
+                return ExecuteResult.PASS;
+            }
         }
-        public void PostInteractNextObject(IInteractable nextBoardObject)
+
+        private bool IsSnakePart(ISlotInfo obj)
+        {
+            if (obj.Team == Team.PLAYER)
+            {
+                Character character = obj.gameObject.GetComponent<Character>();
+                if (character != null)
+                    return characterList.Contains(character);
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        SlotInfo GetNextSlot(Direction dir)
         {
             Character head = characterList.First.Value;
-            nextBoardObject.PostInteract(head.gameObject);
+            Vector3 nextPos = head.CurrentPosition + dir.ToVector3();
+            return this._boardData.GetSlotFromPosition(nextPos);
         }
 
         public void MoveToNewSlot(Direction dir)

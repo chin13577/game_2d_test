@@ -11,7 +11,7 @@ namespace FS
         public static event Action OnUpdateTurn;
         public static event Action OnPostUpdateTurn;
 
-
+        public PixelCamera2DFollower Camera { get => _camera; }
         [SerializeField] private PixelCamera2DFollower _camera;
         public BoardManager BoardManager { get => _boardManager; }
         [SerializeField] private BoardManager _boardManager;
@@ -51,9 +51,11 @@ namespace FS
         void OnDisable()
         {
             StopGlobalTick();
+
+            _currentState?.OnExit();
         }
 
-        Direction playerInputDir = Direction.Up;
+        public Direction playerInputDir = Direction.Up;
 
         Coroutine globalTickCoroutine;
         public void StartGlobalTick()
@@ -74,8 +76,7 @@ namespace FS
             while (true)
             {
                 yield return new WaitForSeconds(1);
-                //TODO: invoke event.
-                //yield return PlayerSnake.Move(playerInputDir);
+
                 OnPreUpdateTurn?.Invoke();
                 OnUpdateTurn?.Invoke();
                 OnPostUpdateTurn?.Invoke();
@@ -117,6 +118,8 @@ namespace FS
                 emptySlotList.Shuffle();
 
                 Hero hero = RandomSpawnHero(emptySlotList);
+                hero.sprite.color = Color.red;
+                hero.name = "head";
                 PlayerSnake.AddCharacter(hero);
 
                 _camera.FollowTarget(hero.transform);
@@ -144,10 +147,7 @@ namespace FS
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                PlayerSnake.TryMove(playerInputDir);
-                if (_currentState.GameStateType == GameState.NORMAL)
-                {
-                }
+                OnUpdateTurn?.Invoke();
             }
         }
 

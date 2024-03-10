@@ -316,7 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495ffd8b396ce154f99014d29635f6a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bgSize: 5
+  _bgSize: 10
   _tilemapDrawer: {fileID: 879999984}
   obstaclePrefab: {fileID: 3897294523900563444, guid: 787d8c31354dc7648b2247b444b67b82, type: 3}
   _debugX: 0
@@ -751,7 +751,7 @@ MonoBehaviour:
   _boardHeight: 15
   ObstacleRatio: 0.2
   characterPrefab: {fileID: 1246592164463229012, guid: 09eec18ecf00f0b42b1e462ca2791e10, type: 3}
-  playerTest: {fileID: 0}
+  playerInputDir: 0
 --- !u!1 &2085679814
 GameObject:
   m_ObjectHideFlags: 0
