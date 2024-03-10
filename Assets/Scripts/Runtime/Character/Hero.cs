@@ -2,18 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hero : Character
+namespace FS
 {
-    public SpriteRenderer sprite;
-    public override Team Team => Team.PLAYER;
 
-    public void SetData()
+    public class Hero : Character, IInteractable
     {
-        //TODO: implement set some status and data.
+        public SpriteRenderer sprite;
+        public override Team Team => Team.PLAYER;
+
+        public void SetData()
+        {
+            //TODO: implement set some status and data.
+        }
+
+        public void SetSprite(string spriteId)
+        {
+            //TODO: load sprite async.
+        }
+
+        public void Interact(GameObject user)
+        {
+        }
+
+        public void PostInteract(GameObject user)
+        {
+            // add to. player team.
+            Hero hero = user.GetComponent<Hero>();
+            if (hero != null)
+            {
+                GameManager.Instance.PlayerSnake.AddCharacter(this);
+            }
+        }
+
     }
 
-    public void SetSprite(string spriteId)
-    {
-        //TODO: load sprite async.
-    }
 }

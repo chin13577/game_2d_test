@@ -10,5 +10,13 @@ public enum Direction
 public enum Team
 {
     PLAYER,
-    ENEMY
+    ENEMY,
+    NATURAL
+}
+
+public enum GameState
+{
+    NORMAL,
+    BATTLE,
+    RESULT
 }

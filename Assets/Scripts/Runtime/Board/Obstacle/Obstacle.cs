@@ -5,13 +5,15 @@ using UnityEngine;
 namespace FS
 {
 
-    public class Obstacle : MonoBehaviour
+    public class Obstacle : MonoBehaviour, IBoardObject
     {
         private ObstacleData _data;
 
         [Header("Debug")]
         [SerializeField] private int col;
         [SerializeField] private int row;
+
+        public Team Team => Team.NATURAL;
 
         public void SetData(ObstacleData data)
         {

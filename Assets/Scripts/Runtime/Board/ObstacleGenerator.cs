@@ -99,7 +99,7 @@ namespace FS
             {
                 for (int j = 0; j < width; j++)
                 {
-                    _boardData.SetObjectToBoard(col + j, row + i, obstacle.gameObject);
+                    _boardData.SetObjectToBoard(col + j, row + i, obstacle);
                     _tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(col + j, row + i));
                 }
             }

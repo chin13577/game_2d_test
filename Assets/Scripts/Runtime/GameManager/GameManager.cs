@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,13 @@ namespace FS
 {
     public class GameManager : MonoBehaviour
     {
+        public static event Action OnPreUpdateTurn;
+        public static event Action OnUpdateTurn;
+        public static event Action OnPostUpdateTurn;
+
+
         [SerializeField] private PixelCamera2DFollower _camera;
+        public BoardManager BoardManager { get => _boardManager; }
         [SerializeField] private BoardManager _boardManager;
 
         [Header("Config")]
@@ -15,8 +22,8 @@ namespace FS
         [Range(0, 1f)] public float ObstacleRatio = 0.1f;
 
         public Character characterPrefab;
+        public PlayerSnake PlayerSnake { get; private set; }
 
-        public Hero playerTest;
         // Start is called before the first frame update
 
         public static GameManager Instance
@@ -29,44 +36,136 @@ namespace FS
             }
         }
 
+
         public static GameManager _instance;
 
         void Start()
         {
             _boardManager.Init();
             _boardManager.SetBoardSize(_boardWidth, _boardHeight);
+            PlayerSnake = new PlayerSnake(this);
+
+            ChangeState(GameState.NORMAL);
+        }
+
+        void OnDisable()
+        {
+            StopGlobalTick();
+        }
+
+        Direction playerInputDir = Direction.Up;
+
+        Coroutine globalTickCoroutine;
+        public void StartGlobalTick()
+        {
+            if (globalTickCoroutine != null)
+                StopCoroutine(globalTickCoroutine);
+            globalTickCoroutine = StartCoroutine(UpdateGlobalTick());
+        }
+
+        public void StopGlobalTick()
+        {
+            if (globalTickCoroutine != null)
+                StopCoroutine(globalTickCoroutine);
+        }
+
+        public IEnumerator UpdateGlobalTick()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(1);
+                //TODO: invoke event.
+                //yield return PlayerSnake.Move(playerInputDir);
+                OnPreUpdateTurn?.Invoke();
+                OnUpdateTurn?.Invoke();
+                OnPostUpdateTurn?.Invoke();
+            }
+        }
+
+        private GameStateBase _currentState;
+        public void ChangeState(GameState state)
+        {
+            _currentState?.OnExit();
+            _currentState = GetGameState(state);
+            _currentState.OnEnter();
+        }
+
+        private GameStateBase GetGameState(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.NORMAL:
+                    return new NormalState(this);
+                case GameState.BATTLE:
+                    break;
+                case GameState.RESULT:
+                    break;
+                default:
+                    return null;
+            }
+            return null;
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Return))
             {
                 _boardManager.ClearData();
                 _boardManager.GenerateObstacle(ObstacleRatio);
 
                 List<BoardObject> emptySlotList = _boardManager.BoardData.GetAllEmptySlots();
-                playerTest = Instantiate(characterPrefab).GetComponent<Hero>();
-
                 emptySlotList.Shuffle();
 
-                Debug.Log("col: " + emptySlotList[0].Col + " row: " + emptySlotList[0].Row);
-                playerTest.CurrentPosition = emptySlotList[0].WorldPos;
-                Debug.Log("world pos: " + emptySlotList[0].WorldPos.x + " " + emptySlotList[0].WorldPos.y);
-                emptySlotList[0].SetObject(playerTest.gameObject);
+                Hero hero = RandomSpawnHero(emptySlotList);
+                PlayerSnake.AddCharacter(hero);
 
-                _camera.FollowTarget(playerTest.transform);
+                _camera.FollowTarget(hero.transform);
+
+                RandomSpawnHero(emptySlotList);
+                RandomSpawnHero(emptySlotList);
+                RandomSpawnHero(emptySlotList);
+                RandomSpawnHero(emptySlotList);
             }
             else if (Input.GetKeyDown(KeyCode.A))
             {
-                BoardObject boardObj = _boardManager.BoardData.GetBoardObjectFromPosition(playerTest.CurrentPosition);
-                Debug.Log("world pos: " + boardObj.WorldPos.x + " " + boardObj.WorldPos.y);
-                boardObj.Clear();
-                playerTest.Move(Direction.Left);
-                Debug.Log("playerTest world pos: " + playerTest.CurrentPosition.x + " " + playerTest.CurrentPosition.y);
-                BoardObject newBoard = _boardManager.BoardData.GetBoardObjectFromPosition(playerTest.CurrentPosition);
-                Debug.Log("world pos: " + newBoard.WorldPos.x + " " + newBoard.WorldPos.y);
-                //newBoard.SetObject(playerTest.gameObject);
+                playerInputDir = Direction.Left;
             }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                playerInputDir = Direction.Right;
+            }
+            else if (Input.GetKeyDown(KeyCode.W))
+            {
+                playerInputDir = Direction.Up;
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                playerInputDir = Direction.Down;
+            }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                IInteractable nextBoardObject = PlayerSnake.InteractNextObject(playerInputDir);
+                if (_currentState.GameStateType == GameState.NORMAL)
+                {
+                    PlayerSnake.MoveToNewSlot(playerInputDir);
+                    if (nextBoardObject != null)
+                    {
+                        PlayerSnake.PostInteractNextObject(nextBoardObject);
+                    }
+                }
+            }
+        }
+
+        private Hero RandomSpawnHero(List<BoardObject> emptySlotList)
+        {
+            BoardObject boardObject = emptySlotList[0];
+            emptySlotList.RemoveAt(0);
+
+            Hero hero = Instantiate(characterPrefab).GetComponent<Hero>();
+            hero.CurrentPosition = boardObject.WorldPos;
+            boardObject.SetObject(hero);
+
+            return hero;
         }
     }
 }

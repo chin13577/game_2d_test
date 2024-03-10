@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace FS
 {
@@ -9,6 +10,7 @@ namespace FS
         /// </summary>
         /// <param name="user">represent to who are interact with this object</param>
         public void Interact(GameObject user);
+        public void PostInteract(GameObject user);
 
     }
 }

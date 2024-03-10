@@ -2,31 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Character : MonoBehaviour
+namespace FS
 {
-    public abstract Team Team { get; }
-
-    public Direction CurrentDirection { get => _currentDirection; private set => _currentDirection = value; }
-    private Direction _currentDirection = Direction.Right;
-
-    public Direction LastDirection { get => _lastDirection; private set => _lastDirection = value; }
-    private Direction _lastDirection = Direction.Right;
-
-    public Vector3 LastPosition;
-    public Vector3 CurrentPosition
+    public abstract class Character : MonoBehaviour, IBoardObject
     {
-        get
-        {
-            return transform.position;
-        }
-        set
-        {
-            transform.position = value;
-        }
-    }
+        public Character Previous;
+        public Character Next;
 
-    public void Move(Direction direction)
-    {
-        CurrentPosition += direction.ToVector3();
+        public abstract Team Team { get; }
+
+        public Direction NextDirection { get; set; }
+
+        public Direction CurrentDirection { get; set; }
+        public Direction LastDirection { get; set; }
+
+        public Vector3 LastPosition;
+        public Vector3 CurrentPosition
+        {
+            get
+            {
+                return transform.position;
+            }
+            set
+            {
+                transform.position = value;
+            }
+        }
+
+        public void Move(Direction direction)
+        {
+            LastDirection = CurrentDirection;
+            CurrentDirection = direction;
+            CurrentPosition += direction.ToVector3();
+        }
     }
 }

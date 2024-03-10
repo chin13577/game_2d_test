@@ -65,6 +65,15 @@ namespace FS
             }
         }
 
+        public bool IsOutOfRange(int col, int row)
+        {
+            if (col < 0 || col >= _bound.w)
+                return true;
+            else if (row < 0 || row >= _bound.h)
+                return true;
+            return false;
+        }
+
         public bool IsOutOfRange(int col, int row, int width, int height)
         {
             for (int i = 0; i < height; i++)
@@ -78,25 +87,17 @@ namespace FS
             return false;
         }
 
-        public bool IsOutOfRange(int col, int row)
+        public BoardObject GetBoardObject(int col, int row)
         {
-            if (col < 0 || col >= _bound.w)
-                return true;
-            else if (row < 0 || row >= _bound.h)
-                return true;
-            return false;
+            if (IsOutOfRange(col, row))
+                return null;
+
+            return BoardObjectArr[row, col];
         }
 
         public BoardObject GetBoardObjectFromPosition(Vector3 position)
         {
-            Vector3Int posInt = position.ToVector3Int();
-            return GetBoardObjectFromPosition(posInt.x, posInt.y);
-        }
-
-        public BoardObject GetBoardObjectFromPosition(int posX, int posY)
-        {
-            Vector3Int arrCoordinate = ConvertWorldPosToArrayPos(posX, posY);
-            Debug.Log(arrCoordinate.x + " " + arrCoordinate.y);
+            Vector3Int arrCoordinate = ConvertWorldPosToArrayPos(position);
             if (IsOutOfRange(arrCoordinate.x, arrCoordinate.y))
                 return null;
 
@@ -113,10 +114,11 @@ namespace FS
             return new Vector3(posX, posY) + TileImgPivot;
         }
 
-        public Vector3Int ConvertWorldPosToArrayPos(int posX, int posY)
+        public Vector3Int ConvertWorldPosToArrayPos(Vector3 position)
         {
-            int col = posX - this.BoardOffsetX;
-            int row = -posY + this.BoardOffsetY;
+            Vector3Int posInt = position.ToVector3Int();
+            int col = posInt.x - this.BoardOffsetX;
+            int row = -posInt.y + this.BoardOffsetY;
             return new Vector3Int(col, row);
         }
 
@@ -127,7 +129,7 @@ namespace FS
             return new Vector3Int(posX, posY);
         }
 
-        public void SetObjectToBoard(int col, int row, GameObject obj)
+        public void SetObjectToBoard(int col, int row, IBoardObject obj)
         {
             if (IsOutOfRange(col, row))
                 return;
