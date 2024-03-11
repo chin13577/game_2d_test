@@ -162,17 +162,27 @@ namespace FS
 
             List<CharacterDirection> directionList = GetCharacterDirectionList();
             SwapPosition(swapType);
+            SetRelation(swapType);
             UpdateCharacterListToBoard();
-            if (swapType == ESwapType.FORWARD)
-            {
-                characterList.FirstToLast();
-            }
-            else
-            {
-                characterList.LastToFirst();
-            }
 
             SetCharacterListDirection(directionList);
+            OnUpdateHead?.Invoke(Head);
+        }
+
+        private void SetRelation(ESwapType swapType)
+        {
+            if (swapType == ESwapType.FORWARD)
+                characterList.FirstToLast();
+            else
+                characterList.LastToFirst();
+
+            Head.Previous = null;
+            for (int i = 1; i < characterList.Count; i++)
+            {
+                characterList[i].Previous = characterList[i - 1];
+                characterList[i - 1].Next = characterList[i];
+            }
+            Tail.Next = null;
         }
 
         private void UpdateCharacterListToBoard()
@@ -200,12 +210,10 @@ namespace FS
 
         private void SetCharacterListDirection(List<CharacterDirection> directionList)
         {
-            int index = 0;
-            foreach (Character character in characterList)
+            for (int i = 0; i < characterList.Count; i++)
             {
-                character.CurrentDirection = directionList[index].CurrentDirection;
-                character.NextDirection = directionList[index].NextDirection;
-                index++;
+                characterList[i].CurrentDirection = directionList[i].CurrentDirection;
+                characterList[i].NextDirection = directionList[i].NextDirection;
             }
         }
 
@@ -213,16 +221,29 @@ namespace FS
         {
             if (swapType == ESwapType.FORWARD)
             {
-                Vector3 lastPos = characterList.Last.CurrentPosition;
-                foreach (Character character in characterList)
+                Vector3 lastPos = characterList[characterList.Count - 1].CurrentPosition;
+                for (int i = characterList.Count - 1; i >= 0; i--)
                 {
-
+                    int previousIndex = i - 1;
+                    if (previousIndex >= 0)
+                    {
+                        characterList[i].CurrentPosition = characterList[previousIndex].CurrentPosition;
+                    }
                 }
-                //characterList.FirstToLast();
+                characterList[0].CurrentPosition = lastPos;
             }
             else
             {
-                characterList.LastToFirst();
+                Vector3 firstPos = characterList[0].CurrentPosition;
+                for (int i = 0; i < characterList.Count; i++)
+                {
+                    int nextIndex = i + 1;
+                    if (nextIndex < characterList.Count)
+                    {
+                        characterList[i].CurrentPosition = characterList[nextIndex].CurrentPosition;
+                    }
+                }
+                characterList[characterList.Count - 1].CurrentPosition = firstPos;
             }
         }
 

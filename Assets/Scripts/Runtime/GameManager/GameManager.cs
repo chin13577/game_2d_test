@@ -102,6 +102,14 @@ namespace FS
                 playerInputDir = Direction.Down;
                 _currentState?.OnPlayerUpdateInputDirection(playerInputDir);
             }
+            else if (Input.GetKeyDown(KeyCode.Q))
+            {
+                PlayerSnake.SwapCharacter(PlayerSnake.ESwapType.FORWARD);
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                PlayerSnake.SwapCharacter(PlayerSnake.ESwapType.BACKWARD);
+            }
         }
 
     }
