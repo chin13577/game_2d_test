@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleState : MonoBehaviour
+namespace FS
 {
-    // Start is called before the first frame update
-    void Start()
+    public class BattleState : GameStateBase
     {
-        
-    }
+        public BattleState(GameManager manager) : base(manager)
+        {
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public override GameState GameStateType => GameState.BATTLE;
+
+        public override void OnEnter()
+        {
+            Debug.Log("OnEnter BattleState");
+        }
+
+        public override void OnExit()
+        {
+            Debug.Log("OnExit BattleState");
+        }
     }
 }

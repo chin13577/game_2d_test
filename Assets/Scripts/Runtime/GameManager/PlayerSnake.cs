@@ -6,6 +6,7 @@ namespace FS
 {
     public enum ExecuteResult
     {
+        INPUT_WRONG_DIRECTION,
         HIT_WALL,
         HIT_OWN_SNAKE_PART,
         HIT_ENEMY,
@@ -96,21 +97,14 @@ namespace FS
         {
             if (IsCanMoveToDirection(playerInputDir) == false)
             {
-                playerInputDir = Head.CurrentDirection;
+                return ExecuteResult.INPUT_WRONG_DIRECTION;
             }
             SlotInfo nextSlot = GetNextSlot(playerInputDir);
             if (nextSlot == null || nextSlot.IsObstacle)
             {
-                if (characterList.Count == 1)
-                {
-                    // dead. do nothing.
-                }
-                else
-                {
-                    Direction dir = Head.CurrentDirection;
-                    RemoveHead();
-                    MoveToNewSlot(dir);
-                }
+                Direction dir = Head.CurrentDirection;
+                RemoveHead();
+                MoveToNewSlot(dir);
                 return ExecuteResult.HIT_WALL;
             }
             else if (nextSlot.IsHasObject && nextSlot.Obj.Team == Team.ENEMY)
@@ -162,6 +156,8 @@ namespace FS
 
         public void MoveToNewSlot(Direction dir)
         {
+            if (characterList.Count == 0)
+                return;
             Character head = characterList.First.Value;
             Character current = head;
 

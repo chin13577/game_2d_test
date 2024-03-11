@@ -7,9 +7,7 @@ namespace FS
 {
     public class GameManager : MonoBehaviour
     {
-        public static event Action OnPreUpdateTurn;
         public static event Action OnUpdateTurn;
-        public static event Action OnPostUpdateTurn;
 
         public PixelCamera2DFollower Camera { get => _camera; }
         [SerializeField] private PixelCamera2DFollower _camera;
@@ -50,38 +48,10 @@ namespace FS
 
         void OnDisable()
         {
-            StopGlobalTick();
-
             _currentState?.OnExit();
         }
 
         public Direction playerInputDir = Direction.Up;
-
-        Coroutine globalTickCoroutine;
-        public void StartGlobalTick()
-        {
-            if (globalTickCoroutine != null)
-                StopCoroutine(globalTickCoroutine);
-            globalTickCoroutine = StartCoroutine(UpdateGlobalTick());
-        }
-
-        public void StopGlobalTick()
-        {
-            if (globalTickCoroutine != null)
-                StopCoroutine(globalTickCoroutine);
-        }
-
-        public IEnumerator UpdateGlobalTick()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(1);
-
-                OnPreUpdateTurn?.Invoke();
-                OnUpdateTurn?.Invoke();
-                OnPostUpdateTurn?.Invoke();
-            }
-        }
 
         private GameStateBase _currentState;
         public void ChangeState(GameState state)
@@ -95,12 +65,14 @@ namespace FS
         {
             switch (state)
             {
+                case GameState.PREPARE:
+
                 case GameState.NORMAL:
                     return new NormalState(this);
                 case GameState.BATTLE:
-                    break;
+                    return new BattleState(this);
                 case GameState.RESULT:
-                    break;
+                    return new ResultState(this);
                 default:
                     return null;
             }
@@ -132,22 +104,22 @@ namespace FS
             else if (Input.GetKeyDown(KeyCode.A))
             {
                 playerInputDir = Direction.Left;
+                _currentState?.OnPlayerUpdateInputDirection(playerInputDir);
             }
             else if (Input.GetKeyDown(KeyCode.D))
             {
                 playerInputDir = Direction.Right;
+                _currentState?.OnPlayerUpdateInputDirection(playerInputDir);
             }
             else if (Input.GetKeyDown(KeyCode.W))
             {
                 playerInputDir = Direction.Up;
+                _currentState?.OnPlayerUpdateInputDirection(playerInputDir);
             }
             else if (Input.GetKeyDown(KeyCode.S))
             {
                 playerInputDir = Direction.Down;
-            }
-            else if (Input.GetKeyDown(KeyCode.Space))
-            {
-                OnUpdateTurn?.Invoke();
+                _currentState?.OnPlayerUpdateInputDirection(playerInputDir);
             }
         }
 
@@ -157,6 +129,7 @@ namespace FS
             emptySlotList.RemoveAt(0);
 
             Hero hero = Instantiate(characterPrefab).GetComponent<Hero>();
+            hero.Init();
             hero.CurrentPosition = slot.WorldPos;
             slot.SetObject(hero);
 

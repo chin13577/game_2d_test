@@ -1,8 +1,11 @@
-﻿namespace FS
+﻿using UnityEngine;
+
+namespace FS
 {
     public class NormalState : GameStateBase
     {
         PlayerSnake _playerSnake;
+        float inputTimestamp = 0;
         public NormalState(GameManager manager) : base(manager)
         {
             _playerSnake = manager.PlayerSnake;
@@ -12,18 +15,32 @@
 
         public override void OnEnter()
         {
-            GameManager.OnUpdateTurn += GameManager_OnUpdateTurn;
-            _playerSnake.SetOnUpdateHead((Character newHead) => { _manager.Camera.FollowTarget(newHead.transform); });
+            Debug.Log("OnEnter NormalState");
+            _playerSnake.SetOnUpdateHead((Character newHead) =>
+            {
+                if (newHead != null)
+                {
+                    _manager.Camera.FollowTarget(newHead.transform);
+                }
+                else
+                {
+                    _manager.Camera.FollowTarget(null);
+                }
+            });
         }
 
         public override void OnExit()
         {
-            GameManager.OnUpdateTurn -= GameManager_OnUpdateTurn;
+            Debug.Log("OnExit NormalState");
         }
 
-        private void GameManager_OnUpdateTurn()
+        public override void OnPlayerUpdateInputDirection(Direction direction)
         {
-            Direction direction = _manager.playerInputDir;
+            if (Time.time - inputTimestamp < 0.25f)
+            {
+                return;
+            }
+            inputTimestamp = Time.time;
             ExecuteResult result = _playerSnake.ExecuteAndMove(direction);
             if (result == ExecuteResult.HIT_ENEMY)
             {
@@ -37,7 +54,7 @@
             }
             else if (result == ExecuteResult.HIT_WALL)
             {
-                if (_playerSnake.Count == 1)
+                if (_playerSnake.Count == 0)
                 {
                     //goto result state
                     _manager.ChangeState(GameState.RESULT);

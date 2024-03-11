@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace FS
 {
-    public abstract class Character : MonoBehaviour, ISlotInfo
+    public abstract class Character : MonoBehaviour, ISlotInfo, IDamagable
     {
+        public Status Status;
         public Character Previous;
         public Character Next;
 
@@ -29,11 +30,31 @@ namespace FS
             }
         }
 
+        public bool IsDead { get => Status.IsDead; }
+
+        public void Init(Status characterStatus = null)
+        {
+            this.Status = characterStatus == null ? new Status() : characterStatus;
+        }
+
         public void Move(Direction direction)
         {
             LastDirection = CurrentDirection;
             CurrentDirection = direction;
             CurrentPosition += direction.ToVector3();
         }
+
+
+        public virtual void TakeDamage(DamageData damageData)
+        {
+            this.Status.HP -= damageData.Damage;
+
+            //TODO: spawn DamangeText.
+            //if critical -> show damage critical.
+
+            //TODO: update ui.
+            //RefreshHPBarUI();
+        }
+
     }
 }

@@ -14,17 +14,20 @@ public class Status
 {
     private int _baseAtk;
     private int _baseMaxHP;
-    private int hp;
+
+    public int HP { get => _hp; set { _hp -= value; } }
+    private int _hp;
 
     public int BonusAtk { get => _bonusAtk; }
     private int _bonusAtk;
     public int BonusMaxHP { get => _bonusMaxHp; }
     private int _bonusMaxHp;
 
+    public bool IsDead { get => _hp <= 0; }
+
     public int TotalAtk { get => _baseAtk + _bonusAtk; }
 
     public int TotalMaxHP { get => _baseMaxHP + _bonusMaxHp; }
-    public int HP { get => hp; }
 
     private int _exp;
     public int EXP
@@ -65,13 +68,11 @@ public class Status
             if (value > _level)
             {
                 // level up
-                hp = _bonusMaxHp;
+                ResetHP();
             }
             _level = value;
         }
     }
-
-
     private int _level = 1;
     private StatusFormula _formula;
 
@@ -91,7 +92,7 @@ public class Status
 
     public void ResetHP()
     {
-        hp = TotalMaxHP;
+        _hp = TotalMaxHP;
     }
 
     private void CalculateStatusByLevel(int level)
