@@ -28,6 +28,37 @@ namespace FS
 
         public void GenerateObstacle(float generateRatio, int totalBoardSize)
         {
+            SpawnObstacle(generateRatio, totalBoardSize);
+            RemoveDeadlockObstacleHorizontal();
+            RemoveDeadlockObstacleVertical();
+        }
+
+        private void RemoveDeadlockObstacleVertical()
+        {
+            List<int> fullObstacleRowList = _boardData.GetAllFullObstacleHorizontal();
+            for (int i = 0; i < fullObstacleRowList.Count; i++)
+            {
+                int randomDeleteColumn = UnityEngine.Random.Range(0, _boardData.BoardWidth);
+                _tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(randomDeleteColumn, i));
+                _boardData.GetSlot(randomDeleteColumn, i).Clear();
+            }
+        }
+
+        private void RemoveDeadlockObstacleHorizontal()
+        {
+            List<int> fullObstacleRowList = _boardData.GetAllFullObstacleHorizontal();
+            for (int i = 0; i < fullObstacleRowList.Count; i++)
+            {
+                int randomDeleteColumn = UnityEngine.Random.Range(0, _boardData.BoardWidth);
+                _tilemapDrawer.SetObstacle(_boardData.ConvertArrayPosToWorldPos(randomDeleteColumn, i));
+                _boardData.GetSlot(randomDeleteColumn, i).Clear();
+            }
+        }
+
+        #region Spawn Obstacle
+
+        private void SpawnObstacle(float generateRatio, int totalBoardSize)
+        {
             generateRatio = Mathf.Clamp01(generateRatio);
             int totalObstacleSlot = Convert.ToInt32(totalBoardSize * generateRatio);
 
@@ -105,6 +136,7 @@ namespace FS
             }
         }
 
+        #endregion
         public void HideAllObject()
         {
             ObstaclePooling.HideAllObject();

@@ -21,6 +21,9 @@ namespace FS
         public int BoardOffsetX { get; private set; }
         public int BoardOffsetY { get; private set; }
 
+        public int BoardWidth { get => SlotArr.GetLength(0); }
+        public int BoardHeight { get => SlotArr.GetLength(1); }
+
         //Dictionary<Vector3Int, BoardObject> LandDict = new Dictionary<Vector3Int, BoardObject>();
         public int TotalSize
         {
@@ -146,6 +149,46 @@ namespace FS
                     if (SlotArr[i, j].IsEmpty)
                         result.Add(SlotArr[i, j]);
                 }
+            }
+            return result;
+        }
+
+        public List<int> GetAllFullObstacleInCol()
+        {
+            List<int> result = new List<int>();
+            for (int col = 0; col < SlotArr.GetLength(1); col++)
+            {
+                bool isHaveAllObstacle = true;
+                for (int row = 0; row < SlotArr.GetLength(0); row++)
+                {
+                    if (SlotArr[row, col].IsObstacle == false)
+                    {
+                        isHaveAllObstacle = false;
+                        break;
+                    }
+                }
+                if (isHaveAllObstacle)
+                    result.Add(col);
+            }
+            return result;
+        }
+
+        public List<int> GetAllFullObstacleHorizontal()
+        {
+            List<int> result = new List<int>();
+            for (int row = 0; row < SlotArr.GetLength(0); row++)
+            {
+                bool isHaveAllObstacle = true;
+                for (int col = 0; col < SlotArr.GetLength(1); col++)
+                {
+                    if (SlotArr[row, col].IsObstacle == false)
+                    {
+                        isHaveAllObstacle = false;
+                        break;
+                    }
+                }
+                if (isHaveAllObstacle)
+                    result.Add(row);
             }
             return result;
         }
