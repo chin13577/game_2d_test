@@ -51,6 +51,10 @@ namespace FS
             {
                 for (int j = 0; j < SlotArr.GetLength(1); j++)
                 {
+                    if (SlotArr[i, j].Obj != null)
+                    {
+                        SlotArr[i, j].Obj.gameObject.SetActive(false);
+                    }
                     SlotArr[i, j].Clear();
                 }
             }
