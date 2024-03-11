@@ -7,10 +7,12 @@ namespace FS
     public class PrepareState : GameStateBase
     {
         private BoardManager _boardManager;
+        private UIManager _uiManager;
 
         public PrepareState(GameManager manager) : base(manager)
         {
             _boardManager = manager.BoardManager;
+            this._uiManager = manager.UIManager;
         }
 
         public override GameState GameStateType => GameState.PREPARE;
@@ -41,7 +43,13 @@ namespace FS
                 RandomSpawnCharacter(emptySlotList, Team.ENEMY);
             }
 
-            _manager.ChangeState(GameState.NORMAL);
+            StartScreenUI startScreenUI = this._uiManager.StartScreenUI;
+            startScreenUI.Show();
+            startScreenUI.startBtn.SetCallback(() =>
+            {
+                startScreenUI.Hide();
+                _manager.ChangeState(GameState.NORMAL);
+            });
         }
         public override void OnExit()
         {

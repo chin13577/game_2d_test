@@ -1,8 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum DeviceType
+{
+    UNKNOWN,
+    GAMEPAD,
+    KEYBOARD
+}
 public class PlayerInputController : MonoBehaviour
 {
     [SerializeField] private InputActionAsset playerControl;
@@ -18,6 +25,7 @@ public class PlayerInputController : MonoBehaviour
     public InputAction RotateRightAction { get; private set; }
 
     public static PlayerInputController Instance;
+
     private void Awake()
     {
         Instance = this;
@@ -40,4 +48,5 @@ public class PlayerInputController : MonoBehaviour
         RotateLeftAction?.Disable();
         RotateRightAction?.Disable();
     }
+
 }

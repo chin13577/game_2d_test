@@ -14,6 +14,9 @@ namespace FS
         public BoardManager BoardManager { get => _boardManager; }
         [SerializeField] private BoardManager _boardManager;
 
+        public UIManager UIManager { get => _uiManager; }
+        [SerializeField] private UIManager _uiManager;
+
         [Header("Config")]
         [SerializeField] private int _boardWidth = 16;
         [SerializeField] private int _boardHeight = 16;
