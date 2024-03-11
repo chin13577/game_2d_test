@@ -36,7 +36,7 @@ namespace FS
 
         public override void OnPlayerUpdateInputDirection(Direction direction)
         {
-            if (Time.time - inputTimestamp < 0.25f)
+            if (Time.time - inputTimestamp < 0.1f)
             {
                 return;
             }

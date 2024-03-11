@@ -12,7 +12,7 @@ public interface IDamagable
 {
     public GameObject gameObject { get; }
     public DamageData GetDamageData();
-    public void TakeDamage(DamageData damageData);
+    public void TakeDamage(DamageData damageData, IDamagable attacker);
     public bool IsDead { get; }
     public Vector3 CurrentPosition { get; }
 }

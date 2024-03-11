@@ -10,6 +10,8 @@ namespace FS
         public Character Previous;
         public Character Next;
 
+        public SpriteRenderer sprite;
+
         public abstract Team Team { get; }
 
         public Direction NextDirection { get; set; }
@@ -32,9 +34,14 @@ namespace FS
 
         public bool IsDead { get => Status.IsDead; }
 
-        public void Init(Status characterStatus = null)
+        public virtual void Init(Status characterStatus = null)
         {
             this.Status = characterStatus == null ? new Status() : characterStatus;
+        }
+
+        public void SetSprite(string spriteId)
+        {
+            //TODO: load sprite async.
         }
 
         public void Move(Direction direction)
@@ -56,10 +63,10 @@ namespace FS
             return damageData;
         }
 
-        public virtual void TakeDamage(DamageData damageData)
+        public virtual void TakeDamage(DamageData damageData, IDamagable attacker)
         {
             this.Status.HP -= damageData.Damage;
-            Debug.Log(this.gameObject.name + " TakeDamage " + damageData.Damage);
+            Debug.Log(attacker.gameObject.name + " attack " + gameObject.name + " " + damageData.Damage);
 
             //TODO: spawn DamangeText.
             //if critical -> show damage critical.

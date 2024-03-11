@@ -750,7 +750,8 @@ MonoBehaviour:
   _boardWidth: 15
   _boardHeight: 15
   ObstacleRatio: 0.2
-  characterPrefab: {fileID: 1246592164463229012, guid: 09eec18ecf00f0b42b1e462ca2791e10, type: 3}
+  heroPrefab: {fileID: 1246592164463229012, guid: 09eec18ecf00f0b42b1e462ca2791e10, type: 3}
+  enemyPrefab: {fileID: 9091170838474345241, guid: f963176dfe7cfc4419a615cb00c9433f, type: 3}
   playerInputDir: 0
 --- !u!1 &2085679814
 GameObject:

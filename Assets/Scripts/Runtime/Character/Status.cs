@@ -15,7 +15,7 @@ public class Status
     private int _baseAtk;
     private int _baseMaxHP;
 
-    public int HP { get => _hp; set { _hp -= value; } }
+    public int HP { get => _hp; set { _hp = value; } }
     private int _hp;
 
     public int BonusAtk { get => _bonusAtk; }

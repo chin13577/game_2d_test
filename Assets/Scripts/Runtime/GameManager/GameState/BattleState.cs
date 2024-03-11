@@ -54,9 +54,9 @@ namespace FS
                 yield return new WaitForSeconds(1);
 
                 // player attack
-                _enemy.TakeDamage(_player.GetDamageData());
+                _enemy.TakeDamage(_player.GetDamageData(), _player);
                 // enemey attack.
-                _player.TakeDamage(_enemy.GetDamageData());
+                _player.TakeDamage(_enemy.GetDamageData(), _enemy);
 
             }
 
@@ -66,11 +66,16 @@ namespace FS
 
         private void ResloveBattle()
         {
+            if (_enemy.IsDead)
+            {
+                RemoveEnemy();
+            }
             if (_player.IsDead)
             {
                 if (_manager.PlayerSnake.Count == 1)
                 {
                     _manager.ChangeState(GameState.RESULT);
+                    return;
                 }
                 else
                 {
@@ -79,12 +84,7 @@ namespace FS
                     _manager.PlayerSnake.MoveToNewSlot(dir);
                 }
             }
-            else
-            {
-                RemoveEnemy();
-
-                _manager.ChangeState(GameState.NORMAL);
-            }
+            _manager.ChangeState(GameState.NORMAL);
         }
 
         private void RemoveEnemy()
