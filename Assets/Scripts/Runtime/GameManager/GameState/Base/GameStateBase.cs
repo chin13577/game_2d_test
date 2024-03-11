@@ -8,11 +8,6 @@
         public abstract void OnEnter();
         public abstract void OnExit();
 
-        public virtual void OnPlayerUpdateInputDirection(Direction direction)
-        {
-
-        }
-
         public GameStateBase(GameManager manager)
         {
             this._manager = manager;

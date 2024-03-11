@@ -1,14 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace FS
 {
     public class NormalState : GameStateBase
     {
         PlayerSnake _playerSnake;
+        private PlayerInputController _playerInput;
         float inputTimestamp = 0;
         public NormalState(GameManager manager) : base(manager)
         {
             _playerSnake = manager.PlayerSnake;
+            this._playerInput = PlayerInputController.Instance;
         }
 
         public override GameState GameStateType => GameState.NORMAL;
@@ -27,14 +31,49 @@ namespace FS
                     _manager.Camera.FollowTarget(null);
                 }
             });
+            RegisterPlayerInputEvent();
         }
 
         public override void OnExit()
         {
             Debug.Log("OnExit NormalState");
+            UnRegisterPlayerInputEvent();
         }
 
-        public override void OnPlayerUpdateInputDirection(Direction direction)
+        private void RegisterPlayerInputEvent()
+        {
+            this._playerInput.MoveAction.performed += MoveAction_performed;
+            this._playerInput.RotateLeftAction.performed += RotateLeftAction_performed;
+            this._playerInput.RotateRightAction.performed += RotateRightAction_performed;
+        }
+
+        private void UnRegisterPlayerInputEvent()
+        {
+            this._playerInput.MoveAction.performed -= MoveAction_performed;
+            this._playerInput.RotateLeftAction.performed -= RotateLeftAction_performed;
+            this._playerInput.RotateRightAction.performed -= RotateRightAction_performed;
+        }
+
+        private void MoveAction_performed(InputAction.CallbackContext context)
+        {
+            Vector2 input = context.ReadValue<Vector2>();
+            Direction? inputDirection = input.ToDirection();
+            if (inputDirection != null)
+            {
+                OnPlayerUpdateInputDirection(inputDirection.Value);
+            }
+        }
+        private void RotateLeftAction_performed(InputAction.CallbackContext context)
+        {
+            _playerSnake.SwapCharacter(PlayerSnake.ESwapType.FORWARD);
+        }
+
+        private void RotateRightAction_performed(InputAction.CallbackContext context)
+        {
+            _playerSnake.SwapCharacter(PlayerSnake.ESwapType.BACKWARD);
+        }
+
+        private void OnPlayerUpdateInputDirection(Direction direction)
         {
             if (Time.time - inputTimestamp < 0.1f)
             {

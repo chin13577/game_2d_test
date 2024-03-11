@@ -80,37 +80,5 @@ namespace FS
             }
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                playerInputDir = Direction.Left;
-                _currentState?.OnPlayerUpdateInputDirection(playerInputDir);
-            }
-            else if (Input.GetKeyDown(KeyCode.D))
-            {
-                playerInputDir = Direction.Right;
-                _currentState?.OnPlayerUpdateInputDirection(playerInputDir);
-            }
-            else if (Input.GetKeyDown(KeyCode.W))
-            {
-                playerInputDir = Direction.Up;
-                _currentState?.OnPlayerUpdateInputDirection(playerInputDir);
-            }
-            else if (Input.GetKeyDown(KeyCode.S))
-            {
-                playerInputDir = Direction.Down;
-                _currentState?.OnPlayerUpdateInputDirection(playerInputDir);
-            }
-            else if (Input.GetKeyDown(KeyCode.Q))
-            {
-                PlayerSnake.SwapCharacter(PlayerSnake.ESwapType.FORWARD);
-            }
-            else if (Input.GetKeyDown(KeyCode.E))
-            {
-                PlayerSnake.SwapCharacter(PlayerSnake.ESwapType.BACKWARD);
-            }
-        }
-
     }
 }

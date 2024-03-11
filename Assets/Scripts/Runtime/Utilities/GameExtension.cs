@@ -60,6 +60,20 @@ public static class GameExtension
         return new Vector3(pos.x, pos.y, pos.z);
     }
 
+    public static Direction? ToDirection(this Vector2 vect)
+    {
+        if (vect.y == 1)
+            return Direction.Up;
+        else if (vect.y == -1)
+            return Direction.Down;
+        if (vect.x == 1)
+            return Direction.Right;
+        else if (vect.x == -1)
+            return Direction.Left;
+
+        return null;
+    }
+
     public static Direction Inverse(this Direction direction)
     {
         switch (direction)
