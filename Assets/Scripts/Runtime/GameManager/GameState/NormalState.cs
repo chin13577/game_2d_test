@@ -65,12 +65,12 @@ namespace FS
         }
         private void RotateLeftAction_performed(InputAction.CallbackContext context)
         {
-            _playerSnake.SwapCharacter(PlayerSnake.ESwapType.FORWARD);
+            _playerSnake.SwapCharacter(PlayerSnake.ESwapType.BACKWARD);
         }
 
         private void RotateRightAction_performed(InputAction.CallbackContext context)
         {
-            _playerSnake.SwapCharacter(PlayerSnake.ESwapType.BACKWARD);
+            _playerSnake.SwapCharacter(PlayerSnake.ESwapType.FORWARD);
         }
 
         private void OnPlayerUpdateInputDirection(Direction direction)
