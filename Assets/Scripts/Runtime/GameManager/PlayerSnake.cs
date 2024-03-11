@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace FS
@@ -13,8 +14,20 @@ namespace FS
         PASS
     }
 
+    public struct CharacterDirection
+    {
+        public Direction NextDirection;
+        public Direction CurrentDirection;
+    }
+
     public class PlayerSnake
     {
+        public enum ESwapType
+        {
+            FORWARD,
+            BACKWARD
+        }
+
         private BoardManager _boardManager;
         private BoardData _boardData;
 
@@ -28,9 +41,19 @@ namespace FS
             {
                 if (characterList.Count == 0)
                     return null;
-                return characterList.First.Value;
+                return characterList.First;
             }
         }
+        public Character Tail
+        {
+            get
+            {
+                if (characterList.Count == 0)
+                    return null;
+                return characterList.Last;
+            }
+        }
+
 
         public int Count { get => characterList.Count; }
 
@@ -67,7 +90,7 @@ namespace FS
             }
             else
             {
-                Character last = characterList.Last.Value;
+                Character last = characterList.Last;
                 characterList.AddLast(character);
                 last.Next = character;
                 character.Previous = last;
@@ -117,7 +140,7 @@ namespace FS
                 {
                     return ExecuteResult.HIT_OWN_SNAKE_PART;
                 }
-                Character head = characterList.First.Value;
+                Character head = characterList.First;
                 IInteractable interactable = nextSlot.Interactable;
                 interactable.Interact(head.gameObject);
 
@@ -131,6 +154,78 @@ namespace FS
                 return ExecuteResult.PASS;
             }
         }
+
+        public void SwapCharacter(ESwapType swapType)
+        {
+            if (Count <= 1)
+                return;
+
+            List<CharacterDirection> directionList = GetCharacterDirectionList();
+            SwapPosition(swapType);
+            UpdateCharacterListToBoard();
+            if (swapType == ESwapType.FORWARD)
+            {
+                characterList.FirstToLast();
+            }
+            else
+            {
+                characterList.LastToFirst();
+            }
+
+            SetCharacterListDirection(directionList);
+        }
+
+        private void UpdateCharacterListToBoard()
+        {
+            foreach (Character character in characterList)
+            {
+                SlotInfo slot = this._boardData.GetSlotFromPosition(character.CurrentPosition);
+                slot.SetObject(character);
+            }
+        }
+
+        private List<CharacterDirection> GetCharacterDirectionList()
+        {
+            List<CharacterDirection> result = new List<CharacterDirection>();
+            foreach (Character character in characterList)
+            {
+                result.Add(new CharacterDirection()
+                {
+                    CurrentDirection = character.CurrentDirection,
+                    NextDirection = character.NextDirection
+                });
+            }
+            return result;
+        }
+
+        private void SetCharacterListDirection(List<CharacterDirection> directionList)
+        {
+            int index = 0;
+            foreach (Character character in characterList)
+            {
+                character.CurrentDirection = directionList[index].CurrentDirection;
+                character.NextDirection = directionList[index].NextDirection;
+                index++;
+            }
+        }
+
+        private void SwapPosition(ESwapType swapType)
+        {
+            if (swapType == ESwapType.FORWARD)
+            {
+                Vector3 lastPos = characterList.Last.CurrentPosition;
+                foreach (Character character in characterList)
+                {
+
+                }
+                //characterList.FirstToLast();
+            }
+            else
+            {
+                characterList.LastToFirst();
+            }
+        }
+
 
         private bool IsSnakePart(ISlotInfo obj)
         {
@@ -149,7 +244,7 @@ namespace FS
 
         public SlotInfo GetNextSlot(Direction dir)
         {
-            Character head = characterList.First.Value;
+            Character head = characterList.First;
             Vector3 nextPos = head.CurrentPosition + dir.ToVector3();
             return this._boardData.GetSlotFromPosition(nextPos);
         }
@@ -158,7 +253,7 @@ namespace FS
         {
             if (characterList.Count == 0)
                 return;
-            Character head = characterList.First.Value;
+            Character head = characterList.First;
             Character current = head;
 
             do

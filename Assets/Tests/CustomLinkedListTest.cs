@@ -95,8 +95,8 @@ public class CustomLinkedListTest : MonoBehaviour
         {
             Debug.Log(item.id);
         }
-        Assert.AreEqual("B", heroList.First.Value.id);
-        Assert.AreEqual("A", heroList.Last.Value.id);
+        Assert.AreEqual("B", heroList.First.id);
+        Assert.AreEqual("A", heroList.Last.id);
     }
 
     [Test]
@@ -112,7 +112,7 @@ public class CustomLinkedListTest : MonoBehaviour
         CustomLinkedList<TestHero> heroList = new CustomLinkedList<TestHero>();
         heroList.AddLast(new TestHero("A"));
         heroList.FirstToLast();
-        Assert.AreEqual("A", heroList.First.Value.id);
+        Assert.AreEqual("A", heroList.First.id);
     }
 
     //// A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
