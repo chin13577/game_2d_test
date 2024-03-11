@@ -147,7 +147,7 @@ namespace FS
             }
         }
 
-        SlotInfo GetNextSlot(Direction dir)
+        public SlotInfo GetNextSlot(Direction dir)
         {
             Character head = characterList.First.Value;
             Vector3 nextPos = head.CurrentPosition + dir.ToVector3();

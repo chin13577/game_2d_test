@@ -10,5 +10,9 @@ public struct DamageData
 }
 public interface IDamagable
 {
+    public GameObject gameObject { get; }
+    public DamageData GetDamageData();
     public void TakeDamage(DamageData damageData);
+    public bool IsDead { get; }
+    public Vector3 CurrentPosition { get; }
 }

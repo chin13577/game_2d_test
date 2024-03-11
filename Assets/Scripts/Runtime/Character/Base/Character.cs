@@ -44,10 +44,22 @@ namespace FS
             CurrentPosition += direction.ToVector3();
         }
 
+        public DamageData GetDamageData()
+        {
+            //TODO: handle critical.
+            bool isCritical = false;
+            DamageData damageData = new DamageData()
+            {
+                Damage = Status.TotalAtk,
+                IsCritical = isCritical
+            };
+            return damageData;
+        }
 
         public virtual void TakeDamage(DamageData damageData)
         {
             this.Status.HP -= damageData.Damage;
+            Debug.Log(this.gameObject.name + " TakeDamage " + damageData.Damage);
 
             //TODO: spawn DamangeText.
             //if critical -> show damage critical.

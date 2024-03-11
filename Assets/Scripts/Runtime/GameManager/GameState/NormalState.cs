@@ -45,6 +45,9 @@ namespace FS
             if (result == ExecuteResult.HIT_ENEMY)
             {
                 // goto battle state.
+                SlotInfo nextSlot = _playerSnake.GetNextSlot(direction);
+                Monster enemy = nextSlot.Obj.gameObject.GetComponent<Monster>();
+                DataManager.Instance.SetCurrentBattleEnemy(enemy);
                 _manager.ChangeState(GameState.BATTLE);
             }
             else if (result == ExecuteResult.HIT_OWN_SNAKE_PART)
