@@ -68,6 +68,15 @@ namespace FS
         {
             OnUpdateHead = callback;
         }
+
+        public void ClearAllCharacterEventEmitter()
+        {
+            for (int i = 0; i < characterList.Count; i++)
+            {
+                characterList[i].ClearAllEventEmitter();
+            }
+        }
+
         public void RemoveHead()
         {
             if (Count == 0)
@@ -99,6 +108,7 @@ namespace FS
                 SlotInfo newSlot = this._boardData.GetSlotFromPosition(character.CurrentPosition);
                 newSlot.SetObject(character);
             }
+            character.SetOwnerSnake(this);
         }
 
         private bool IsCanMoveToDirection(Direction direction)

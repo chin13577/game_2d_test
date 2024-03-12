@@ -42,19 +42,13 @@ namespace FS
             _gameUI.Show();
             _gameUI.PlayerDetailUI.Show();
             _gameUI.EnemyDetailUI.Show();
-            RegisterCharacterCallbackEvent(_gameUI.PlayerDetailUI, _player);
-            RegisterCharacterCallbackEvent(_gameUI.EnemyDetailUI, _enemy);
+            base.RegisterCharacterCallbackEvent(_gameUI.PlayerDetailUI, _player);
+            base.RegisterCharacterCallbackEvent(_gameUI.EnemyDetailUI, _enemy);
 
 
             if (_battlePhaseCoroutine != null)
                 _manager.StopCoroutine(_battlePhaseCoroutine);
             _battlePhaseCoroutine = _manager.StartCoroutine(PlayBattleLoop());
-        }
-
-        private void RegisterCharacterCallbackEvent(CharacterDetailUI detailUI, Character character)
-        {
-            detailUI.SetCharacter(character);
-            character.SetCallbackOnStatusUpdate((status) => detailUI.UpdateStatusUI(status));
         }
 
         public override void OnExit()

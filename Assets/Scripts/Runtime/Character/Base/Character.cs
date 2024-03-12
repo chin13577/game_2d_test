@@ -9,8 +9,8 @@ namespace FS
     {
         private Action<Status> OnStatusUpdate;
         public Status Status;
-        public Character Previous;
-        public Character Next;
+        [HideInInspector] public Character Previous;
+        [HideInInspector] public Character Next;
 
         public SpriteRenderer sprite;
 
@@ -22,6 +22,8 @@ namespace FS
         public Direction LastDirection { get; set; }
 
         public Vector3 LastPosition;
+        private PlayerSnake _owner;
+
         public Vector3 CurrentPosition
         {
             get
@@ -41,6 +43,11 @@ namespace FS
             this.Status = characterStatus == null ? new Status() : characterStatus;
         }
 
+        public void SetOwnerSnake(PlayerSnake owner)
+        {
+            this._owner = owner;
+        }
+
         public void SetSprite(string spriteId)
         {
             //TODO: load sprite async.
@@ -53,12 +60,32 @@ namespace FS
 
         private void OnEnable()
         {
-
+            GameManager.OnUpdateTurn += GameManager_OnUpdateTurn;
         }
 
         private void OnDisable()
         {
+            ClearAllEventEmitter();
+            this._owner = null;
+            GameManager.OnUpdateTurn -= GameManager_OnUpdateTurn;
+        }
+
+        public void ClearAllEventEmitter()
+        {
             OnStatusUpdate = null;
+        }
+
+        private void GameManager_OnUpdateTurn(int currentTurn)
+        {
+            //TODO: set 0.5 as config.
+            int expGain = this._owner == null ? 1 : Math.Ceiling(this._owner.Count * 0.5f).ToInt32();
+
+            if(Status.EXP+ expGain >= Status.MaxEXP)
+            {
+                //TODO: show level up.
+            }
+            Status.EXP += expGain;
+            OnStatusUpdate?.Invoke(Status);
         }
 
         public void Move(Direction direction)

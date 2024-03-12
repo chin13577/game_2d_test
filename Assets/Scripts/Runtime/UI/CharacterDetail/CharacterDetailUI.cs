@@ -13,13 +13,14 @@ public class CharacterDetailUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _levelText;
     public void SetCharacter(Character character)
     {
-        this._image.sprite = character.sprite.sprite;
+        if (character.sprite)
+            this._image.sprite = character.sprite.sprite;
         UpdateStatusUI(character.Status);
     }
 
     public void UpdateStatusUI(Status status)
     {
-        _levelText.text = status.Level.ToString();
+        _levelText.text = "Lv." + status.Level.ToString();
         _statusText.text = GetStatusText(status);
     }
 

@@ -24,12 +24,10 @@ namespace FS
             Debug.Log("OnEnter NormalState");
             _gameUI.Show();
             _gameUI.SetTurnText(_manager.GetTurn());
+            _gameUI.PlayerDetailUI.Show();
+            base.RegisterCharacterCallbackEvent(_gameUI.PlayerDetailUI, _playerSnake.Head);
 
-            _playerSnake.SetOnUpdateHead((Character newHead) =>
-            {
-                Transform followTarget = newHead == null ? null : newHead.transform;
-                _manager.Camera.FollowTarget(followTarget);
-            });
+            _playerSnake.SetOnUpdateHead(OnPlayerSnakeUpdateHead);
             RegisterEvent();
         }
 
@@ -38,6 +36,7 @@ namespace FS
             Debug.Log("OnExit NormalState");
             UnRegisterEvent();
         }
+        #region Event
 
         private void RegisterEvent()
         {
@@ -69,6 +68,9 @@ namespace FS
             this._playerInput.RotateLeftAction.performed -= RotateLeftAction_performed;
             this._playerInput.RotateRightAction.performed -= RotateRightAction_performed;
         }
+        #endregion
+
+        #region PlayerInput
 
         private void MoveAction_performed(InputAction.CallbackContext context)
         {
@@ -94,6 +96,16 @@ namespace FS
             _playerSnake.SwapCharacter(PlayerSnake.ESwapType.FORWARD);
         }
 
+        #endregion
+
+        private void OnPlayerSnakeUpdateHead(Character newHead)
+        {
+            Transform followTarget = newHead == null ? null : newHead.transform;
+            _manager.Camera.FollowTarget(followTarget);
+
+            _playerSnake.ClearAllCharacterEventEmitter();
+            base.RegisterCharacterCallbackEvent(_gameUI.PlayerDetailUI, _playerSnake.Head);
+        }
         private bool OnPlayerUpdateInputDirection(Direction direction)
         {
             if (Time.time - inputTimestamp < 0.1f)

@@ -12,5 +12,11 @@
         {
             this._manager = manager;
         }
+        protected void RegisterCharacterCallbackEvent(CharacterDetailUI detailUI, Character character)
+        {
+            detailUI.SetCharacter(character);
+            character.SetCallbackOnStatusUpdate((status) => detailUI.UpdateStatusUI(status));
+        }
+
     }
 }
