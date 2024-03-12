@@ -23,7 +23,7 @@ namespace FS
         {
             Debug.Log("OnEnter NormalState");
             _gameUI.Show();
-            _gameUI.SetTurnText(_manager.GetTurn());
+            _gameUI.SetTurnText(DataManager.Instance.GetTurn());
             _gameUI.PlayerDetailUI.Show();
             base.RegisterCharacterCallbackEvent(_gameUI.PlayerDetailUI, _playerSnake.Head);
 
@@ -40,13 +40,13 @@ namespace FS
 
         private void RegisterEvent()
         {
-            GameManager.OnUpdateTurn += OnManagerUpdateTurn;
+            DataManager.OnUpdateTurn += OnManagerUpdateTurn;
             RegisterPlayerInputEvent();
         }
 
         private void UnRegisterEvent()
         {
-            GameManager.OnUpdateTurn -= OnManagerUpdateTurn;
+            DataManager.OnUpdateTurn -= OnManagerUpdateTurn;
             UnRegisterPlayerInputEvent();
         }
 

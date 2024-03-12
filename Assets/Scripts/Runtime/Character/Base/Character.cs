@@ -60,7 +60,7 @@ namespace FS
 
         private void OnEnable()
         {
-            GameManager.OnUpdateTurn += GameManager_OnUpdateTurn;
+            DataManager.OnUpdateTurn += GameManager_OnUpdateTurn;
         }
 
         private void OnDisable()
@@ -69,7 +69,7 @@ namespace FS
             this._owner = null;
             Previous = null;
             Next = null;
-            GameManager.OnUpdateTurn -= GameManager_OnUpdateTurn;
+            DataManager.OnUpdateTurn -= GameManager_OnUpdateTurn;
         }
 
         public void ClearAllEventEmitter()

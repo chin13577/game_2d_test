@@ -25,7 +25,7 @@ namespace FS
             _boardManager.SetBoardSize(_boardWidth, _boardHeight);
             _manager.PlayerSnake = new PlayerSnake(_manager);
 
-            _manager.SetTurn(0);
+            DataManager.Instance.SetTurn(0);
 
             _uiManager.HideAll();
             Debug.Log("OnEnter PrepareState");

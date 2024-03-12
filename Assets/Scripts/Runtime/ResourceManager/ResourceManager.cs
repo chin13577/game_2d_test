@@ -13,7 +13,7 @@ namespace FS
         private const string PREFIX_BUNDLE = "Assets/Bundles/";
         private static Dictionary<string, UnityEngine.Object> resources = new Dictionary<string, UnityEngine.Object>();
 
-        private static List<string> loadAssetStatus = new List<string>();
+        private List<string> loadAssetStatus = new List<string>();
 
         public static ResourceManager Instance
         {
@@ -103,6 +103,8 @@ namespace FS
             }
             else
             {
+                // loadAssetStatus is use for prevent load asset multiple times.
+                // I need to load object just one time.
                 if (loadAssetStatus.Contains(assetPath))
                 {
                     yield return new WaitUntil(() => loadAssetStatus.Contains(assetPath) == false);
