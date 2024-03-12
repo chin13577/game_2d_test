@@ -16,6 +16,7 @@ namespace FS
             Debug.Log("OnEnter ResultState");
             ResultUI resultUI = _manager.UIManager.ResultUI;
             resultUI.Show();
+            resultUI.SetResultText(DataManager.Instance.GetKillCount(), DataManager.Instance.GetTurn());
             resultUI.resetBtn.SetCallback(() =>
             {
                 resultUI.Hide();

@@ -88,6 +88,7 @@ namespace FS
             if (_enemy.IsDead)
             {
                 RemoveEnemy();
+                DataManager.Instance.UpdateKillCount();
             }
             if (_player.IsDead)
             {

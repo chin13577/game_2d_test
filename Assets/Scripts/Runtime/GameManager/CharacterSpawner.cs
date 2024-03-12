@@ -81,13 +81,46 @@ namespace FS
 
             List<SlotInfo> emptySlotList = _manager.BoardManager.BoardData.GetAllEmptySlots();
             emptySlotList.Shuffle();
-            List<Character> characterList = _manager.RandomSpawnCharacterList(emptySlotList, team, createAmount);
+            List<Character> characterList = RandomSpawnCharacterList(emptySlotList, team, createAmount);
 
             int heightestLevel = _manager.PlayerSnake.GetHighestLevel();
             for (int i = 0; i < characterList.Count; i++)
             {
                 characterList[i].Status.Level = Mathf.Ceil(heightestLevel * levelMultiplier).ToInt32();
             }
+        }
+
+        public List<Character> RandomSpawnCharacterList(List<SlotInfo> emptySlotList, Team team, int amount)
+        {
+            List<Character> result = new List<Character>();
+            for (int i = 0; i < amount; i++)
+            {
+                Character character = RandomSpawnCharacter(emptySlotList, team);
+                if (character != null)
+                {
+                    result.Add(character);
+                }
+            }
+            return result;
+        }
+
+        public Character RandomSpawnCharacter(List<SlotInfo> emptySlotList, Team team)
+        {
+            if (emptySlotList.Count == 0)
+                return null;
+
+            SlotInfo slot = emptySlotList[0];
+            emptySlotList.RemoveAt(0);
+
+            Character character = team == Team.PLAYER ? _manager.CharacterFactory.GetHero() : _manager.CharacterFactory.GetMonster();
+
+            GameConfig config = DataManager.Instance.Config;
+            StatusFormula formula = team == Team.PLAYER ? config.heroStatusFormula : config.enemyStatusFormula;
+            character.Init(new Status(formula));
+            character.CurrentPosition = slot.WorldPos;
+            slot.SetObject(character);
+
+            return character;
         }
 
     }

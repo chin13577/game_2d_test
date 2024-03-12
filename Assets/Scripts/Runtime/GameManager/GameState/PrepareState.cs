@@ -26,6 +26,7 @@ namespace FS
             _manager.PlayerSnake = new PlayerSnake(_manager);
 
             DataManager.Instance.SetTurn(0);
+            DataManager.Instance.ResetKillCount();
 
             _uiManager.HideAll();
             Debug.Log("OnEnter PrepareState");
@@ -37,18 +38,14 @@ namespace FS
             List<SlotInfo> emptySlotList = _boardManager.BoardData.GetAllEmptySlots();
             emptySlotList.Shuffle();
 
-            Character hero = _manager.RandomSpawnCharacter(emptySlotList, Team.PLAYER);
-            //TODO: remove this line. it just for debug.
-            hero.sprite.color = Color.green;
-            hero.name = "head";
+            Character hero = _manager.CharacterSpawner.RandomSpawnCharacter(emptySlotList, Team.PLAYER);
             _manager.PlayerSnake.AddCharacter(hero);
-
             _manager.Camera.FollowTarget(hero.transform);
 
             int initHeroAmount = DataManager.Instance.Config.InitSpawnHeroCount;
-            _manager.RandomSpawnCharacterList(emptySlotList, Team.PLAYER, initHeroAmount);
+            _manager.CharacterSpawner.RandomSpawnCharacterList(emptySlotList, Team.PLAYER, initHeroAmount);
             int initEnemyAmount = DataManager.Instance.Config.InitSpawnMonsterCount;
-            _manager.RandomSpawnCharacterList(emptySlotList, Team.ENEMY, initEnemyAmount);
+            _manager.CharacterSpawner.RandomSpawnCharacterList(emptySlotList, Team.ENEMY, initEnemyAmount);
 
             StartScreenUI startScreenUI = this._uiManager.StartScreenUI;
             startScreenUI.Show();

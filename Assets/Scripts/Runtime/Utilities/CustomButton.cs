@@ -12,7 +12,6 @@ public class CustomButton : MonoBehaviour
 
     [Header("Optional")]
     [SerializeField] public string sfxKey = "";
-    [SerializeField] public AudioSource audioSource;
 
 
     public void SetCallback(Action onClick)
@@ -21,14 +20,6 @@ public class CustomButton : MonoBehaviour
         this.button.onClick.AddListener(() =>
         {
             onClick?.Invoke();
-            if (audioSource != null)
-            {
-                audioSource.Play();
-            }
-            if (sfxKey != "")
-            {
-                //AudioManager.Instance.PlaySfx(sfxKey);
-            }
         });
     }
 

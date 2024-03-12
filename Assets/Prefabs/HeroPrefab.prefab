@@ -97,5 +97,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350d448f86f1e2940ad4bcc0adf6690e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LastPosition: {x: 0, y: 0, z: 0}
+  Previous: {fileID: 0}
+  Next: {fileID: 0}
   sprite: {fileID: 1246592164463229013}
+  spriteList:
+  - {fileID: 21300000, guid: 9f22bfcd963301840b5282eaec95b8d6, type: 3}
+  - {fileID: 21300000, guid: 44ced49e34f4f4943b2cce8d409f32f7, type: 3}
+  LastPosition: {x: 0, y: 0, z: 0}

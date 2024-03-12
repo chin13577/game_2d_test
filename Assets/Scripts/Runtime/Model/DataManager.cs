@@ -34,6 +34,8 @@ public class DataManager
 
     private int _turn = 0;
 
+    private int _killCount = 0;
+
     public void SetConfig(GameConfig config)
     {
         this.Config = config;
@@ -60,6 +62,24 @@ public class DataManager
         this._currentEnemy = enemy;
     }
 
+    #region KillCount
+
+    public int GetKillCount()
+    {
+        return _killCount;
+    }
+    public void ResetKillCount()
+    {
+        _killCount = 0;
+    }
+    public void UpdateKillCount()
+    {
+        _killCount += 1;
+    }
+    #endregion
+
+    #region Turn
+
     public void UpdateTurn()
     {
         this._turn += 1;
@@ -74,4 +94,5 @@ public class DataManager
     {
         return _turn;
     }
+    #endregion
 }

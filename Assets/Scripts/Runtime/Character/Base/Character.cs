@@ -14,6 +14,8 @@ namespace FS
 
         public SpriteRenderer sprite;
 
+        [SerializeField] private List<Sprite> spriteList = new List<Sprite>();
+
         public abstract Team Team { get; }
 
         public Direction NextDirection { get; set; }
@@ -46,6 +48,7 @@ namespace FS
         public virtual void Init(Status characterStatus = null)
         {
             this.Status = characterStatus == null ? new Status() : characterStatus;
+            SetRandomSprite();
         }
 
         public void SetOwnerSnake(PlayerSnake owner)
@@ -53,9 +56,10 @@ namespace FS
             this._owner = owner;
         }
 
-        public void SetSprite(string spriteId)
+        public void SetRandomSprite()
         {
-            //TODO: load sprite async.
+            int index = UnityEngine.Random.Range(0, spriteList.Count);
+            this.sprite.sprite = spriteList[index];
         }
 
         public void SetCallbackOnStatusUpdate(Action<Status> callback)
