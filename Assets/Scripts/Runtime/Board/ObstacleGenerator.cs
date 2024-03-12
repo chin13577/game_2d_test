@@ -123,7 +123,6 @@ namespace FS
                 return;
 
             Obstacle obstacle = ObstaclePooling.GetObject();
-            obstacle.gameObject.SetActive(true);
             obstacle.SetData(new ObstacleData(col, row, width, height));
 
             for (int i = 0; i < height; i++)

@@ -63,8 +63,7 @@ namespace FS
             SlotInfo slot = emptySlotList[0];
             emptySlotList.RemoveAt(0);
 
-            Character prefab = team == Team.PLAYER ? _manager.heroPrefab : _manager.enemyPrefab;
-            Character character = GameObject.Instantiate(prefab).GetComponent<Character>();
+            Character character = team == Team.PLAYER ? _manager.CharacterFactory.GetHero() : _manager.CharacterFactory.GetMonster();
             character.Init();
             character.CurrentPosition = slot.WorldPos;
             slot.SetObject(character);

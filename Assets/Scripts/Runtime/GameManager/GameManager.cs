@@ -13,6 +13,8 @@ namespace FS
         [SerializeField] private PixelCamera2DFollower _camera;
         public BoardManager BoardManager { get => _boardManager; }
         [SerializeField] private BoardManager _boardManager;
+        public CharacterFactory CharacterFactory { get => _characterFactory; }
+        [SerializeField] private CharacterFactory _characterFactory;
 
         public UIManager UIManager { get => _uiManager; }
         [SerializeField] private UIManager _uiManager;
@@ -21,9 +23,6 @@ namespace FS
         [SerializeField] private int _boardWidth = 16;
         [SerializeField] private int _boardHeight = 16;
         [Range(0, 1f)] public float ObstacleRatio = 0.1f;
-
-        public Hero heroPrefab;
-        public Monster enemyPrefab;
 
         public PlayerSnake PlayerSnake { get; private set; }
 
@@ -44,6 +43,7 @@ namespace FS
 
         void Start()
         {
+            _characterFactory.Init();
             _boardManager.Init();
             _boardManager.SetBoardSize(_boardWidth, _boardHeight);
             PlayerSnake = new PlayerSnake(this);

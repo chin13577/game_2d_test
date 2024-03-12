@@ -45,6 +45,7 @@ namespace FS
             var obj = objects.Find(x => (x.gameObject.activeSelf == false));
             if (obj == null)
                 obj = CreateAndAddToList();
+            obj.gameObject.SetActive(true);
             return obj;
         }
 
