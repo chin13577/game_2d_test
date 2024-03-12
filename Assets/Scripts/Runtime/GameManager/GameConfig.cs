@@ -40,6 +40,8 @@ public class GameConfig : ScriptableObject
     public float SpawnHeroLevelMultiplier = 0.8f;
 
     public int MaxLevel = 99;
+    public int MaxAtk = 999;
+    public int MaxHP = 999;
 
     [Tooltip("Status Formula. 'x' represent to level")]
     public StatusFormula heroStatusFormula;

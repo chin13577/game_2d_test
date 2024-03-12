@@ -29,9 +29,25 @@ public class Status
 
     public bool IsDead { get => _hp <= 0; }
 
-    public int TotalAtk { get => _baseAtk + _bonusAtk; }
+    public int TotalAtk
+    {
+        get
+        {
+            int maxAtkValue = DataManager.Instance.Config.MaxAtk;
+            int total = Mathf.Min(_baseAtk + _bonusAtk, maxAtkValue);
+            return total;
+        }
+    }
 
-    public int TotalMaxHP { get => _baseMaxHP + _bonusMaxHp; }
+    public int TotalMaxHP
+    {
+        get
+        {
+            int maxHPValue = DataManager.Instance.Config.MaxHP;
+            int total = Mathf.Min(_baseMaxHP + _bonusMaxHp, maxHPValue);
+            return total;
+        }
+    }
 
     private int _exp;
     public int EXP
@@ -68,6 +84,9 @@ public class Status
         }
         set
         {
+            int maxLevel = DataManager.Instance.Config.MaxLevel;
+            if (_level == maxLevel && value > maxLevel)
+                return;
             CalculateStatusByLevel(value);
             if (value > _level)
             {
