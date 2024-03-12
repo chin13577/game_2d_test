@@ -62,7 +62,7 @@ namespace FS
 
         private void InitSlotList(int width, int height)
         {
-            SlotArr = new SlotInfo[width, height];
+            SlotArr = new SlotInfo[height, width];
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)

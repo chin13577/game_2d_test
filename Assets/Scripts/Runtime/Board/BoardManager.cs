@@ -10,6 +10,7 @@ namespace FS
     public class BoardManager : MonoBehaviour
     {
         [SerializeField] private int _bgSize = 5;
+        public const int MIN_BOARD_SIZE = 3;
 
         public TilemapDrawer TilemapDrawer { get => _tilemapDrawer; }
         [SerializeField] private TilemapDrawer _tilemapDrawer;
@@ -34,6 +35,9 @@ namespace FS
 
         public void SetBoardSize(int width, int height)
         {
+            width = Math.Clamp(width, MIN_BOARD_SIZE, int.MaxValue);
+            height = Math.Clamp(height, MIN_BOARD_SIZE, int.MaxValue);
+
             _boardData.Init(width, height);
 
             _tilemapDrawer.ClearAllTiles();

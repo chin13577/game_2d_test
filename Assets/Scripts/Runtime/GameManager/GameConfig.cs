@@ -13,8 +13,13 @@ public struct SpawnWeightData
 [CreateAssetMenu(fileName = "GameConfig", menuName = "ScriptableObjects/GameConfig")]
 public class GameConfig : ScriptableObject
 {
+    public int BoardWidth = 16;
+    public int BoardHeight = 16;
+
     public int InitSpawnHeroCount = 5;
     public int InitSpawnMonsterCount = 5;
+    [Range(0, 1f)] public float ObstacleRatio = 0.2f;
+
 
     public float ExpMultiplier { get => Mathf.Clamp(_expMultiplier, 0.1f, float.MaxValue); }
     [SerializeField] private float _expMultiplier = 0.5f;

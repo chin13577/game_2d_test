@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf16ced4caa52d84db6869329a59e96e, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
+  BoardWidth: 16
+  BoardHeight: 16
   InitSpawnHeroCount: 5
   InitSpawnMonsterCount: 5
+  ObstacleRatio: 0.2
   _expMultiplier: 0.5
   _spawnHeroTurn: 10
   _spawnEnemyTurn: 5

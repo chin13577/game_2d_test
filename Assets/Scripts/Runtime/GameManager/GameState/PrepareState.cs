@@ -20,9 +20,9 @@ namespace FS
         public override void OnEnter()
         {
             _manager.CharacterFactory.ClearAll();
-            int _boardWidth = 16;
-            int _boardHeight = 16;
-            _boardManager.SetBoardSize(_boardWidth, _boardHeight);
+
+            GameConfig config = DataManager.Instance.Config;
+            _boardManager.SetBoardSize(config.BoardWidth, config.BoardHeight);
             _manager.PlayerSnake = new PlayerSnake(_manager);
 
             DataManager.Instance.SetTurn(0);
@@ -30,7 +30,9 @@ namespace FS
             _uiManager.HideAll();
             Debug.Log("OnEnter PrepareState");
             _boardManager.ClearData();
-            _boardManager.GenerateObstacle(_manager.ObstacleRatio);
+
+            float obstacleRatio = DataManager.Instance.Config.ObstacleRatio;
+            _boardManager.GenerateObstacle(obstacleRatio);
 
             List<SlotInfo> emptySlotList = _boardManager.BoardData.GetAllEmptySlots();
             emptySlotList.Shuffle();

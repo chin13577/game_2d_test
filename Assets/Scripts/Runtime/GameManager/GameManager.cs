@@ -20,14 +20,7 @@ namespace FS
         public UIManager UIManager { get => _uiManager; }
         [SerializeField] private UIManager _uiManager;
 
-        [Header("Config")]
-        [SerializeField] private int _boardWidth = 16;
-        [SerializeField] private int _boardHeight = 16;
-        [Range(0, 1f)] public float ObstacleRatio = 0.1f;
-
         public PlayerSnake PlayerSnake { get; set; }
-
-        // Start is called before the first frame update
 
         public static GameManager Instance
         {
@@ -54,8 +47,6 @@ namespace FS
         {
             _currentState?.OnExit();
         }
-
-        public Direction playerInputDir = Direction.Up;
 
         private GameStateBase _currentState;
 
