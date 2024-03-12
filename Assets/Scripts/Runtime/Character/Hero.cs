@@ -8,6 +8,7 @@ namespace FS
 
     public class Hero : Character, IInteractable
     {
+        public GameObject headIcon;
         public static event Action OnHeroJoinTeam;
         public override Team Team => Team.PLAYER;
 
@@ -32,6 +33,17 @@ namespace FS
                 GameManager.Instance.PlayerSnake.AddCharacter(this);
                 OnHeroJoinTeam?.Invoke();
             }
+        }
+
+        public void SetActiveHeadIcon(bool isHead)
+        {
+            headIcon.SetActive(isHead);
+        }
+
+        protected override void ClearAllData()
+        {
+            base.ClearAllData();
+            SetActiveHeadIcon(false);
         }
 
     }

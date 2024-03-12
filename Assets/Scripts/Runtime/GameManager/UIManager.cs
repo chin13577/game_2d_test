@@ -7,6 +7,9 @@ public class UIManager : MonoBehaviour
 {
     public StartScreenUI StartScreenUI { get => _startScreenUI; }
     [SerializeField] private StartScreenUI _startScreenUI;
+    public TutorialUI TutorialUI { get => _tutorialUI; }
+    [SerializeField] private TutorialUI _tutorialUI;
+
     public ResultUI ResultUI { get => _resultUI; }
     [SerializeField] private ResultUI _resultUI;
 

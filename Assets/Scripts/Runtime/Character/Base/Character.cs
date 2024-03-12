@@ -79,6 +79,12 @@ namespace FS
             Previous = null;
             Next = null;
             DataManager.OnUpdateTurn -= GameManager_OnUpdateTurn;
+            ClearAllData();
+        }
+
+        protected virtual void ClearAllData()
+        {
+
         }
 
         public void ClearAllEventEmitter()

@@ -102,13 +102,26 @@ namespace FS
             character.gameObject.SetActive(false);
             characterList.RemoveFirst();
 
+            RefreshHeadSprite();
             OnUpdateHead?.Invoke(Head);
         }
+
+        private void RefreshHeadSprite()
+        {
+            for (int i = 0; i < characterList.Count; i++)
+            {
+                bool isHead = i == 0;
+                Hero hero = characterList[i] as Hero;
+                hero.SetActiveHeadIcon(isHead);
+            }
+        }
+
         public void AddCharacter(Character character)
         {
             if (Count == 0)
             {
                 characterList.AddFirst(character);
+                RefreshHeadSprite();
             }
             else
             {
@@ -189,6 +202,7 @@ namespace FS
             UpdateCharacterListToBoard();
 
             SetCharacterListDirection(directionList);
+            RefreshHeadSprite();
             OnUpdateHead?.Invoke(Head);
         }
 
