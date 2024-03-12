@@ -1,4 +1,4 @@
-# Place Obstacle
+# Snake Structure
 
 Contents:
 
