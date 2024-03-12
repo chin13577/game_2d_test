@@ -20,12 +20,20 @@ public class GameConfig : ScriptableObject
     public int InitSpawnMonsterCount = 5;
     [Range(0, 1f)] public float ObstacleRatio = 0.2f;
 
-
+    /// <summary>
+    /// exp multiplier for each turn.
+    /// </summary>
     public float ExpMultiplier { get => Mathf.Clamp(_expMultiplier, 0.1f, float.MaxValue); }
     [SerializeField] private float _expMultiplier = 0.5f;
 
+    /// <summary>
+    /// hero will spawn every this value turns.
+    /// </summary>
     public int SpawnHeroTurn { get => Mathf.Clamp(_spawnHeroTurn, 1, int.MaxValue); }
     [SerializeField] private int _spawnHeroTurn = 1;
+    /// <summary>
+    /// enemy will spawn every this value turns.
+    /// </summary>
     public int SpawnEnemyTurn { get => Mathf.Clamp(_spawnEnemyTurn, 1, int.MaxValue); }
     [SerializeField] private int _spawnEnemyTurn = 1;
 
