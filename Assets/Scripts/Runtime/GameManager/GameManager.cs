@@ -39,6 +39,17 @@ namespace FS
 
         void Start()
         {
+            LoadBGMAndPlay();
+
+            BoardManager.Init();
+            CharacterFactory.Init();
+            DamageTextFactory.Init();
+            CharacterSpawner.Init(this);
+            ChangeState(GameState.PREPARE);
+        }
+
+        private void LoadBGMAndPlay()
+        {
             ResourceManager.Instance.GetAsset<AudioClip>("BGM/octopath-bgm.mp3", (AudioClip clip) =>
             {
                 if (clip != null)
@@ -47,12 +58,6 @@ namespace FS
                     this.bgmAudioSource.Play();
                 }
             });
-
-            BoardManager.Init();
-            CharacterFactory.Init();
-            DamageTextFactory.Init();
-            CharacterSpawner.Init(this);
-            ChangeState(GameState.PREPARE);
         }
 
         void OnDisable()

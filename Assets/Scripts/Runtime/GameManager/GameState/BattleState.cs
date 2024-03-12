@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace FS
 {
+    /// <summary>
+    /// The state that handle player battle with enemy.
+    /// </summary>
     public class BattleState : GameStateBase
     {
         private Coroutine _battlePhaseCoroutine;
@@ -109,6 +112,7 @@ namespace FS
         {
             SlotInfo currentSlot = this._boardData.GetSlotFromPosition(_enemy.CurrentPosition);
             currentSlot.Clear();
+            // if gameObject is active false, it will be automaticaly collect to object pooling.
             _enemy.gameObject.SetActive(false);
         }
     }

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace FS
 {
+    /// <summary>
+    /// The state that handle show result and manage ui.
+    /// </summary>
     public class ResultState : GameStateBase
     {
         public ResultState(GameManager manager) : base(manager)

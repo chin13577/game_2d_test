@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace FS
 {
+    /// <summary>
+    /// The state that init all data before playing.
+    /// </summary>
     public class PrepareState : GameStateBase
     {
         private BoardManager _boardManager;

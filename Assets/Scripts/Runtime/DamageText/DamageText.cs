@@ -26,6 +26,7 @@ namespace FS
             _moveCoroutine = StartCoroutine(MoveUP(0.8f, 1f));
             _fadeTextCoroutine = StartCoroutine(FadeText(0.8f, () =>
             {
+                // if gameObject is active false, it will be automaticaly collect to object pooling.
                 gameObject.SetActive(false);
             }));
         }

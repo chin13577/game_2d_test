@@ -98,6 +98,7 @@ namespace FS
             Character character = Head;
             SlotInfo currentSlot = this._boardData.GetSlotFromPosition(character.CurrentPosition);
             currentSlot.Clear();
+            // if gameObject is active false, it will be automaticaly collect to object pooling.
             character.gameObject.SetActive(false);
             characterList.RemoveFirst();
 

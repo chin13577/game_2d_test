@@ -53,6 +53,7 @@ namespace FS
                 {
                     if (SlotArr[i, j].Obj != null)
                     {
+                        // if gameObject is active false, it will be automaticaly collect to object pooling.
                         SlotArr[i, j].Obj.gameObject.SetActive(false);
                     }
                     SlotArr[i, j].Clear();

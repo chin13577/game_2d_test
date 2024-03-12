@@ -4,6 +4,9 @@ using UnityEngine.InputSystem;
 
 namespace FS
 {
+    /// <summary>
+    /// The state that handle player move state.
+    /// </summary>
     public class NormalState : GameStateBase
     {
         PlayerSnake _playerSnake;
