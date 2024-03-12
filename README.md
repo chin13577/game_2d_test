@@ -1,3 +1,11 @@
+
+Contents:
+
+- [Extra features](#extra-features)
+- [How to config game value](#how-to-config-game-value)
+- [Class diagram](#class-diagram)
+- [Techinal Decision](#techinal-decision)
+
 ## Extra features
 
 - Character's Level and EXP system.
