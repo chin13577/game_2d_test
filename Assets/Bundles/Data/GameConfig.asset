@@ -45,6 +45,8 @@ MonoBehaviour:
   SpawnMonsterLevelMultiplier: 0.8
   SpawnHeroLevelMultiplier: 0.8
   MaxLevel: 99
+  MaxAtk: 999
+  MaxHP: 999
   heroStatusFormula:
     AttackFormula: 2*x+5
     MaxHPFormula: 2.5*x+15

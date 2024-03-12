@@ -27,6 +27,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
+  - m_GUID: 6247be6bbb60df04fa74c3b01a586754
+    m_Address: Assets/Bundles/BGM
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 834d1e3a8d5e4ef4a9e3d103c56fc92f, type: 2}
   m_SchemaSet:
