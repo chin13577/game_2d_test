@@ -10,12 +10,16 @@ namespace FS
 
         private void OnEnable()
         {
-            DataManager.OnUpdateTurn += DataManager_OnUpdateTurn;
+            DataManager.OnUpdateTurn += SpawnCharacterByGameTurn;
+            Hero.OnHeroJoinTeam += Hero_OnHeroJoinTeam;
+            Monster.OnMonsterDead += Monster_OnMonsterDead;
         }
 
         private void OnDisable()
         {
-            DataManager.OnUpdateTurn -= DataManager_OnUpdateTurn;
+            DataManager.OnUpdateTurn -= SpawnCharacterByGameTurn;
+            Hero.OnHeroJoinTeam -= Hero_OnHeroJoinTeam;
+            Monster.OnMonsterDead -= Monster_OnMonsterDead;
         }
 
         public void Init(GameManager manager)
@@ -23,7 +27,25 @@ namespace FS
             _manager = manager;
         }
 
-        private void DataManager_OnUpdateTurn(int turn)
+        private void Hero_OnHeroJoinTeam()
+        {
+            GameConfig config = DataManager.Instance.Config;
+            int createAmount = DataManager.Instance.SpawnOnHeroJoinWeight.Random();
+            Debug.Log("spawn hero: " + createAmount);
+            RandomSpawnCharacter(Team.PLAYER, createAmount, config.SpawnHeroLevelMultiplier);
+        }
+
+        private void Monster_OnMonsterDead()
+        {
+            GameConfig config = DataManager.Instance.Config;
+            int createAmount = DataManager.Instance.SpawnOnEnemyDeadWeight.Random();
+            Debug.Log("spawn monster: " + createAmount);
+            RandomSpawnCharacter(Team.ENEMY, createAmount, config.SpawnMonsterLevelMultiplier);
+        }
+
+        #region Spawn By Turn Updated
+
+        private void SpawnCharacterByGameTurn(int turn)
         {
             GameConfig config = DataManager.Instance.Config;
             HandleSpawnEnemyLogic(turn, config);
@@ -35,12 +57,9 @@ namespace FS
             bool isCanSpawnEnemy = turn > 0 && turn % config.SpawnEnemyTurn == 0;
             if (isCanSpawnEnemy)
             {
-                //spawn enemy
-                List<SlotInfo> emptySlotList = _manager.BoardManager.BoardData.GetAllEmptySlots();
-                emptySlotList.Shuffle();
-
-                int createAmount = DataManager.Instance.EnemySpawnWeight.Random();
-                RandomSpawnCharacter(Team.ENEMY, emptySlotList, createAmount, config.SpawnMonsterLevelMultiplier);
+                int createAmount = DataManager.Instance.EnemySpawnByTurnWeight.Random();
+                Debug.Log("spawn enemy: " + createAmount);
+                RandomSpawnCharacter(Team.ENEMY, createAmount, config.SpawnMonsterLevelMultiplier);
             }
         }
 
@@ -48,15 +67,20 @@ namespace FS
         {
             if (turn > 0 && turn % config.SpawnHeroTurn == 0)
             {
-                List<SlotInfo> emptySlotList = _manager.BoardManager.BoardData.GetAllEmptySlots();
-                emptySlotList.Shuffle();
-
-                int createAmount = DataManager.Instance.EnemySpawnWeight.Random();
-                RandomSpawnCharacter(Team.PLAYER, emptySlotList, createAmount, config.SpawnHeroLevelMultiplier);
+                int createAmount = DataManager.Instance.EnemySpawnByTurnWeight.Random();
+                Debug.Log("spawn hero: " + createAmount);
+                RandomSpawnCharacter(Team.PLAYER, createAmount, config.SpawnHeroLevelMultiplier);
             }
         }
-        private void RandomSpawnCharacter(Team team, List<SlotInfo> emptySlotList, int createAmount, float levelMultiplier)
+        #endregion
+
+        private void RandomSpawnCharacter(Team team, int createAmount, float levelMultiplier)
         {
+            if (createAmount == 0)
+                return;
+
+            List<SlotInfo> emptySlotList = _manager.BoardManager.BoardData.GetAllEmptySlots();
+            emptySlotList.Shuffle();
             List<Character> characterList = _manager.RandomSpawnCharacterList(emptySlotList, team, createAmount);
 
             int heightestLevel = _manager.PlayerSnake.GetHighestLevel();

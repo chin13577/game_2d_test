@@ -25,19 +25,26 @@ public class DataManager
     private Monster _currentEnemy;
 
     public GameConfig Config { get; private set; }
-    public RandomWeight<int> HeroSpawnWeight { get; private set; }
-    public RandomWeight<int> EnemySpawnWeight { get; private set; }
+    public RandomWeight<int> HeroSpawnByTurnWeight { get; private set; }
+    public RandomWeight<int> EnemySpawnByTurnWeight { get; private set; }
+
+
+    public RandomWeight<int> SpawnOnHeroJoinWeight { get; private set; }
+    public RandomWeight<int> SpawnOnEnemyDeadWeight { get; private set; }
 
     private int _turn = 0;
 
     public void SetConfig(GameConfig config)
     {
         this.Config = config;
-        HeroSpawnWeight = GenerateCharacterRandomWeight(config.SpawnHeroWeightList);
-        EnemySpawnWeight = GenerateCharacterRandomWeight(config.SpawnMonsterWeightList);
+        HeroSpawnByTurnWeight = GenerateSpawnRandomWeight(config.SpawnHeroWeightList);
+        EnemySpawnByTurnWeight = GenerateSpawnRandomWeight(config.SpawnMonsterWeightList);
+
+        SpawnOnEnemyDeadWeight = GenerateSpawnRandomWeight(config.SpawnOnMonsterDeadWeightList);
+        SpawnOnHeroJoinWeight = GenerateSpawnRandomWeight(config.SpawnOnHeroJoinWeightList);
     }
 
-    private RandomWeight<int> GenerateCharacterRandomWeight(List<SpawnWeightData> weightList)
+    private RandomWeight<int> GenerateSpawnRandomWeight(List<SpawnWeightData> weightList)
     {
         RandomWeight<int> spawnWeight = new RandomWeight<int>();
         for (int i = 0; i < weightList.Count; i++)

@@ -21,6 +21,11 @@ namespace FS
         public Direction CurrentDirection { get; set; }
         public Direction LastDirection { get; set; }
 
+        protected void InvokeOnStatusUpdateEvent(Status status)
+        {
+            OnStatusUpdate?.Invoke(status);
+        }
+
         public Vector3 LastPosition;
         private PlayerSnake _owner;
 
@@ -109,13 +114,7 @@ namespace FS
             return damageData;
         }
 
-        public virtual void TakeDamage(DamageData damageData, IDamagable attacker)
-        {
-            this.Status.HP = Mathf.Clamp(this.Status.HP - damageData.Damage, 0, this.Status.TotalMaxHP);
-            Debug.Log(attacker.gameObject.name + " attack " + gameObject.name + " " + damageData.Damage);
-
-            OnStatusUpdate?.Invoke(this.Status);
-        }
+        public abstract void TakeDamage(DamageData damageData, IDamagable attacker);
 
     }
 }

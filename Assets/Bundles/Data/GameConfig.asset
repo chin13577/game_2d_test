@@ -17,13 +17,36 @@ MonoBehaviour:
   _expMultiplier: 0.5
   _spawnHeroTurn: 10
   _spawnEnemyTurn: 5
+  SpawnOnMonsterDeadWeightList:
+  - SpawnAmount: 1
+    Weight: 40
+  - SpawnAmount: 2
+    Weight: 5
+  SpawnOnHeroJoinWeightList:
+  - SpawnAmount: 0
+    Weight: 20
+  - SpawnAmount: 1
+    Weight: 10
   SpawnMonsterWeightList:
   - SpawnAmount: 1
     Weight: 10
   - SpawnAmount: 2
     Weight: 5
   SpawnHeroWeightList:
+  - SpawnAmount: 0
+    Weight: 10
   - SpawnAmount: 1
     Weight: 20
   - SpawnAmount: 2
     Weight: 5
+  SpawnMonsterLevelMultiplier: 0.8
+  SpawnHeroLevelMultiplier: 0.8
+  MaxLevel: 99
+  heroStatusFormula:
+    AttackFormula: 2*x+5
+    MaxHPFormula: 2.5*x+15
+    MaxEXPFormula: 5*x+10
+  enemyStatusFormula:
+    AttackFormula: 2*x+5
+    MaxHPFormula: 2.5*x+15
+    MaxEXPFormula: 4*x+10

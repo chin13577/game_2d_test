@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 
+/// <summary>
+/// Status Formula. "x" represent to level.
+/// </summary>
+[Serializable]
 public class StatusFormula
 {
     public string AttackFormula = "2*x+5";
