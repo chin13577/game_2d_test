@@ -29,4 +29,4 @@ class diagram:
 https://drive.google.com/file/d/1GS3m6tgXnBQ4GNG9-y2y1dQ9jqYQwCy_/view?usp=drive_link
 
 ## Techinal Decision
-
+[Place Obstacle](document/place-obstacle.md)
