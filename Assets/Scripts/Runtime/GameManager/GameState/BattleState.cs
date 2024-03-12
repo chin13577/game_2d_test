@@ -69,10 +69,12 @@ namespace FS
                 // player attack
                 DamageData playerDamage = _player.GetDamageData();
                 _enemy.TakeDamage(playerDamage, _player);
+                _manager.DamageTextFactory.SpawnText(playerDamage.Damage.ToString(), _player.CurrentPosition);
 
                 // enemey attack.
                 DamageData enemyDamage = _enemy.GetDamageData();
                 _player.TakeDamage(enemyDamage, _enemy);
+                _manager.DamageTextFactory.SpawnText(enemyDamage.Damage.ToString(), _enemy.CurrentPosition);
 
             }
 

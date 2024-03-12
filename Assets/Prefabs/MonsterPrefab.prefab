@@ -103,4 +103,6 @@ MonoBehaviour:
   spriteList:
   - {fileID: 21300000, guid: 078724072d93f074c9b6f4975dfbeb84, type: 3}
   - {fileID: 21300000, guid: 9aa2851e9ebb5a048a538141f3e2fcde, type: 3}
+  - {fileID: 21300000, guid: ad128209104d39645ada0809a5b0f096, type: 3}
+  - {fileID: 21300000, guid: 25380a43272207f4f86312563f74bd87, type: 3}
   LastPosition: {x: 0, y: 0, z: 0}

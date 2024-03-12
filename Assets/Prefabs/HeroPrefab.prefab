@@ -52,6 +52,9 @@ MonoBehaviour:
   spriteList:
   - {fileID: 21300000, guid: 9f22bfcd963301840b5282eaec95b8d6, type: 3}
   - {fileID: 21300000, guid: 44ced49e34f4f4943b2cce8d409f32f7, type: 3}
+  - {fileID: 21300000, guid: c7627a946a1d3864db9f787663221965, type: 3}
+  - {fileID: 21300000, guid: acc6fa3f20c38844e9fa4e08321922cd, type: 3}
+  - {fileID: 21300000, guid: 45de478950608a540a1c9e0bfddc92a6, type: 3}
   LastPosition: {x: 0, y: 0, z: 0}
   headIcon: {fileID: 7352555532717439672}
 --- !u!1 &7352555532717439672

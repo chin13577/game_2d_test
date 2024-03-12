@@ -7,16 +7,18 @@ namespace FS
 {
     public class GameManager : MonoBehaviour
     {
+        public AudioSource bgmAudioSource;
         public PixelCamera2DFollower Camera { get => _camera; }
         [SerializeField] private PixelCamera2DFollower _camera;
         public BoardManager BoardManager { get => _boardManager; }
         [SerializeField] private BoardManager _boardManager;
         public CharacterFactory CharacterFactory { get => _characterFactory; }
         [SerializeField] private CharacterFactory _characterFactory;
+        public DamageTextFactory DamageTextFactory { get => _damageTextFactory; }
+        [SerializeField] private DamageTextFactory _damageTextFactory;
 
         public CharacterSpawner CharacterSpawner { get => _characterSpawner; }
         [SerializeField] private CharacterSpawner _characterSpawner;
-
         public UIManager UIManager { get => _uiManager; }
         [SerializeField] private UIManager _uiManager;
 
@@ -37,8 +39,18 @@ namespace FS
 
         void Start()
         {
+            ResourceManager.Instance.GetAsset<AudioClip>("BGM/octopath-bgm.mp3", (AudioClip clip) =>
+            {
+                if (clip != null)
+                {
+                    this.bgmAudioSource.clip = clip;
+                    this.bgmAudioSource.Play();
+                }
+            });
+
             BoardManager.Init();
             CharacterFactory.Init();
+            DamageTextFactory.Init();
             CharacterSpawner.Init(this);
             ChangeState(GameState.PREPARE);
         }

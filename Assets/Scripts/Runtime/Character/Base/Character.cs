@@ -95,7 +95,11 @@ namespace FS
         private void GameManager_OnUpdateTurn(int currentTurn)
         {
             int expGain = this._owner == null ? 1 : Math.Ceiling(this._owner.Count * DataManager.Instance.Config.ExpMultiplier).ToInt32();
-
+            if (Status.EXP + expGain >= Status.MaxEXP)
+            {
+                DamageTextFactory damageTextFactory = GameManager.Instance.DamageTextFactory;
+                damageTextFactory.SpawnText("Lvl Up", CurrentPosition);
+            }
             Status.EXP += expGain;
             OnStatusUpdate?.Invoke(Status);
         }
