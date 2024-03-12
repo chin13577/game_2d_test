@@ -7,7 +7,7 @@ namespace FS
 {
     public class GameManager : MonoBehaviour
     {
-        public static event Action OnUpdateTurn;
+        public static event Action<int> OnUpdateTurn;
 
         public PixelCamera2DFollower Camera { get => _camera; }
         [SerializeField] private PixelCamera2DFollower _camera;
@@ -59,6 +59,8 @@ namespace FS
         public Direction playerInputDir = Direction.Up;
 
         private GameStateBase _currentState;
+        private int _turn = 0;
+
         public void ChangeState(GameState state)
         {
             _currentState?.OnExit();
@@ -83,5 +85,25 @@ namespace FS
             }
         }
 
+      
+        public void OnPlayerMove()
+        {
+            UpdateTurn();
+        }
+
+        public void UpdateTurn()
+        {
+            this._turn += 1;
+            OnUpdateTurn?.Invoke(this._turn);
+        }
+        public void SetTurn(int turn)
+        {
+            this._turn = turn;
+        }
+
+        public int GetTurn()
+        {
+            return _turn;
+        }
     }
 }

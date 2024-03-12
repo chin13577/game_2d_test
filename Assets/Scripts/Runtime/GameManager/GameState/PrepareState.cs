@@ -19,6 +19,9 @@ namespace FS
 
         public override void OnEnter()
         {
+            _manager.SetTurn(0);
+
+            _uiManager.HideAll();
             Debug.Log("OnEnter PrepareState");
             _boardManager.ClearData();
             _boardManager.GenerateObstacle(_manager.ObstacleRatio);

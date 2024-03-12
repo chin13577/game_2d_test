@@ -8,11 +8,13 @@ namespace FS
     {
         PlayerSnake _playerSnake;
         private PlayerInputController _playerInput;
+        private GameUI _gameUI;
         float inputTimestamp = 0;
         public NormalState(GameManager manager) : base(manager)
         {
             _playerSnake = manager.PlayerSnake;
             this._playerInput = PlayerInputController.Instance;
+            this._gameUI = manager.UIManager.GameUI;
         }
 
         public override GameState GameStateType => GameState.NORMAL;
@@ -20,24 +22,38 @@ namespace FS
         public override void OnEnter()
         {
             Debug.Log("OnEnter NormalState");
+            _gameUI.Show();
+            _gameUI.SetTurnText(_manager.GetTurn());
+
             _playerSnake.SetOnUpdateHead((Character newHead) =>
             {
-                if (newHead != null)
-                {
-                    _manager.Camera.FollowTarget(newHead.transform);
-                }
-                else
-                {
-                    _manager.Camera.FollowTarget(null);
-                }
+                Transform followTarget = newHead == null ? null : newHead.transform;
+                _manager.Camera.FollowTarget(followTarget);
             });
-            RegisterPlayerInputEvent();
+            RegisterEvent();
         }
 
         public override void OnExit()
         {
             Debug.Log("OnExit NormalState");
+            UnRegisterEvent();
+        }
+
+        private void RegisterEvent()
+        {
+            GameManager.OnUpdateTurn += OnManagerUpdateTurn;
+            RegisterPlayerInputEvent();
+        }
+
+        private void UnRegisterEvent()
+        {
+            GameManager.OnUpdateTurn -= OnManagerUpdateTurn;
             UnRegisterPlayerInputEvent();
+        }
+
+        private void OnManagerUpdateTurn(int turn)
+        {
+            this._gameUI.SetTurnText(turn);
         }
 
         private void RegisterPlayerInputEvent()
@@ -60,8 +76,13 @@ namespace FS
             Direction? inputDirection = input.ToDirection();
             if (inputDirection != null)
             {
-                OnPlayerUpdateInputDirection(inputDirection.Value);
+                bool isMoveSuccess = OnPlayerUpdateInputDirection(inputDirection.Value);
+                if (isMoveSuccess)
+                {
+                    _manager.OnPlayerMove();
+                }
             }
+
         }
         private void RotateLeftAction_performed(InputAction.CallbackContext context)
         {
@@ -73,11 +94,11 @@ namespace FS
             _playerSnake.SwapCharacter(PlayerSnake.ESwapType.FORWARD);
         }
 
-        private void OnPlayerUpdateInputDirection(Direction direction)
+        private bool OnPlayerUpdateInputDirection(Direction direction)
         {
             if (Time.time - inputTimestamp < 0.1f)
             {
-                return;
+                return false;
             }
             inputTimestamp = Time.time;
             ExecuteResult result = _playerSnake.ExecuteAndMove(direction);
@@ -102,6 +123,11 @@ namespace FS
                     _manager.ChangeState(GameState.RESULT);
                 }
             }
+            else if (result == ExecuteResult.PASS)
+            {
+                return true;
+            }
+            return false;
         }
 
     }

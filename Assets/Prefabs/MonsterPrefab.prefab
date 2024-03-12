@@ -99,4 +99,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Previous: {fileID: 0}
   Next: {fileID: 0}
+  sprite: {fileID: 1246592164463229013}
   LastPosition: {x: 0, y: 0, z: 0}

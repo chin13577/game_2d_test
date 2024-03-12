@@ -8,12 +8,15 @@ namespace FS
     {
         private Coroutine _battlePhaseCoroutine;
         private BoardData _boardData;
-
-        private IDamagable _player;
-        private IDamagable _enemy;
+        private UIManager _uiManager;
+        private GameUI _gameUI;
+        private Character _player;
+        private Character _enemy;
         public BattleState(GameManager manager) : base(manager)
         {
             this._boardData = manager.BoardManager.BoardData;
+            this._uiManager = manager.UIManager;
+            this._gameUI = this._uiManager.GameUI;
         }
 
         public override GameState GameStateType => GameState.BATTLE;
@@ -36,9 +39,22 @@ namespace FS
             _player = _manager.PlayerSnake.Head;
             _enemy = DataManager.Instance.CurrentEnemy;
 
+            _gameUI.Show();
+            _gameUI.PlayerDetailUI.Show();
+            _gameUI.EnemyDetailUI.Show();
+            RegisterCharacterCallbackEvent(_gameUI.PlayerDetailUI, _player);
+            RegisterCharacterCallbackEvent(_gameUI.EnemyDetailUI, _enemy);
+
+
             if (_battlePhaseCoroutine != null)
                 _manager.StopCoroutine(_battlePhaseCoroutine);
             _battlePhaseCoroutine = _manager.StartCoroutine(PlayBattleLoop());
+        }
+
+        private void RegisterCharacterCallbackEvent(CharacterDetailUI detailUI, Character character)
+        {
+            detailUI.SetCharacter(character);
+            character.SetCallbackOnStatusUpdate((status) => detailUI.UpdateStatusUI(status));
         }
 
         public override void OnExit()
@@ -46,7 +62,10 @@ namespace FS
             Debug.Log("OnExit BattleState");
             if (_battlePhaseCoroutine != null)
                 _manager.StopCoroutine(_battlePhaseCoroutine);
+
+            _gameUI.EnemyDetailUI.Hide();
         }
+
         private IEnumerator PlayBattleLoop()
         {
             while (IsBattleEnd == false)
@@ -54,13 +73,19 @@ namespace FS
                 yield return new WaitForSeconds(1);
 
                 // player attack
-                _enemy.TakeDamage(_player.GetDamageData(), _player);
+                DamageData playerDamage = _player.GetDamageData();
+                _enemy.TakeDamage(playerDamage, _player);
+                //TODO: spawn DamangeText.
+                //if critical -> show damage critical.
+
                 // enemey attack.
-                _player.TakeDamage(_enemy.GetDamageData(), _enemy);
+                DamageData enemyDamage = _enemy.GetDamageData();
+                _player.TakeDamage(enemyDamage, _enemy);
+                //TODO: spawn DamangeText.
+                //if critical -> show damage critical.
 
             }
 
-            //reslove battle.
             ResloveBattle();
         }
 

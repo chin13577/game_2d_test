@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ namespace FS
 {
     public abstract class Character : MonoBehaviour, ISlotInfo, IDamagable
     {
+        private Action<Status> OnStatusUpdate;
         public Status Status;
         public Character Previous;
         public Character Next;
@@ -44,6 +46,21 @@ namespace FS
             //TODO: load sprite async.
         }
 
+        public void SetCallbackOnStatusUpdate(Action<Status> callback)
+        {
+            this.OnStatusUpdate = callback;
+        }
+
+        private void OnEnable()
+        {
+
+        }
+
+        private void OnDisable()
+        {
+            OnStatusUpdate = null;
+        }
+
         public void Move(Direction direction)
         {
             LastDirection = CurrentDirection;
@@ -65,14 +82,10 @@ namespace FS
 
         public virtual void TakeDamage(DamageData damageData, IDamagable attacker)
         {
-            this.Status.HP -= damageData.Damage;
+            this.Status.HP = Mathf.Clamp(this.Status.HP - damageData.Damage, 0, this.Status.TotalMaxHP);
             Debug.Log(attacker.gameObject.name + " attack " + gameObject.name + " " + damageData.Damage);
 
-            //TODO: spawn DamangeText.
-            //if critical -> show damage critical.
-
-            //TODO: update ui.
-            //RefreshHPBarUI();
+            OnStatusUpdate?.Invoke(this.Status);
         }
 
     }
