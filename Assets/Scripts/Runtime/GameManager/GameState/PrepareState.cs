@@ -19,6 +19,12 @@ namespace FS
 
         public override void OnEnter()
         {
+            _manager.CharacterFactory.ClearAll();
+            int _boardWidth = 16;
+            int _boardHeight = 16;
+            _boardManager.SetBoardSize(_boardWidth, _boardHeight);
+            _manager.PlayerSnake = new PlayerSnake(_manager);
+
             _manager.SetTurn(0);
 
             _uiManager.HideAll();

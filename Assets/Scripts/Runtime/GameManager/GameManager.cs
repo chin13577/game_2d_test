@@ -24,7 +24,7 @@ namespace FS
         [SerializeField] private int _boardHeight = 16;
         [Range(0, 1f)] public float ObstacleRatio = 0.1f;
 
-        public PlayerSnake PlayerSnake { get; private set; }
+        public PlayerSnake PlayerSnake { get; set; }
 
         // Start is called before the first frame update
 
@@ -43,11 +43,8 @@ namespace FS
 
         void Start()
         {
-            _characterFactory.Init();
-            _boardManager.Init();
-            _boardManager.SetBoardSize(_boardWidth, _boardHeight);
-            PlayerSnake = new PlayerSnake(this);
-
+            CharacterFactory.Init();
+            BoardManager.Init();
             ChangeState(GameState.PREPARE);
         }
 
@@ -85,7 +82,7 @@ namespace FS
             }
         }
 
-      
+
         public void OnPlayerMove()
         {
             UpdateTurn();

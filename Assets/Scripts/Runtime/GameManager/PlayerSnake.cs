@@ -61,7 +61,6 @@ namespace FS
         {
             this._boardManager = gameManager.BoardManager;
             this._boardData = this._boardManager.BoardData;
-
         }
 
         public void SetOnUpdateHead(Action<Character> callback)

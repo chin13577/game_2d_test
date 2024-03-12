@@ -12,10 +12,15 @@ namespace FS
         private FlexiblePooling<Character> _monsterPooling;
         private FlexiblePooling<Character> _heroPooling;
 
+        private bool _isInit = false;
         public void Init()
         {
-            this._heroPooling = new FlexiblePooling<Character>(null, _heroPrefab, 1);
-            this._monsterPooling = new FlexiblePooling<Character>(null, _enemyPrefab, 1);
+            if (_isInit == false)
+            {
+                _isInit = true;
+                this._heroPooling = new FlexiblePooling<Character>(null, _heroPrefab, 1);
+                this._monsterPooling = new FlexiblePooling<Character>(null, _enemyPrefab, 1);
+            }
         }
 
 
@@ -27,6 +32,12 @@ namespace FS
         public Character GetMonster()
         {
             return this._monsterPooling.GetObject();
+        }
+
+        public void ClearAll()
+        {
+            this._heroPooling.HideAllObject();
+            this._monsterPooling.HideAllObject();
         }
 
     }

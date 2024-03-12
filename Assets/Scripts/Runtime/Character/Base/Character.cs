@@ -67,6 +67,8 @@ namespace FS
         {
             ClearAllEventEmitter();
             this._owner = null;
+            Previous = null;
+            Next = null;
             GameManager.OnUpdateTurn -= GameManager_OnUpdateTurn;
         }
 
@@ -80,7 +82,7 @@ namespace FS
             //TODO: set 0.5 as config.
             int expGain = this._owner == null ? 1 : Math.Ceiling(this._owner.Count * 0.5f).ToInt32();
 
-            if(Status.EXP+ expGain >= Status.MaxEXP)
+            if (Status.EXP + expGain >= Status.MaxEXP)
             {
                 //TODO: show level up.
             }

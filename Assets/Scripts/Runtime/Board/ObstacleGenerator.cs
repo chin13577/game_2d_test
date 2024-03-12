@@ -28,6 +28,7 @@ namespace FS
 
         public void GenerateObstacle(float generateRatio, int totalBoardSize)
         {
+            ObstaclePooling.HideAllObject();
             SpawnObstacle(generateRatio, totalBoardSize);
             RemoveDeadlockObstacleHorizontal();
             RemoveDeadlockObstacleVertical();
