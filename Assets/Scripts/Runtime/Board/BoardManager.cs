@@ -37,6 +37,7 @@ namespace FS
             _boardData.Init(width, height);
 
             _tilemapDrawer.ClearAllTiles();
+            _bgSize = width * 2;
             DrawMap(width + _bgSize, height + _bgSize, TilemapDrawer.TileType.WALL);
             DrawMap(width, height, TilemapDrawer.TileType.GROUND);
         }

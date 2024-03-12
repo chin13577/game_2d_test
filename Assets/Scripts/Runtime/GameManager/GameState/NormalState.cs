@@ -104,7 +104,10 @@ namespace FS
             _manager.Camera.FollowTarget(followTarget);
 
             _playerSnake.ClearAllCharacterEventEmitter();
-            base.RegisterCharacterCallbackEvent(_gameUI.PlayerDetailUI, _playerSnake.Head);
+            if (newHead != null)
+            {
+                base.RegisterCharacterCallbackEvent(_gameUI.PlayerDetailUI, _playerSnake.Head);
+            }
         }
         private bool OnPlayerUpdateInputDirection(Direction direction)
         {
