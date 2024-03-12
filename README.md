@@ -1,10 +1,19 @@
 
 Contents:
 
+- [How to run project](#how-to-run-project)
 - [Extra features](#extra-features)
 - [How to config game value](#how-to-config-game-value)
 - [Class diagram](#class-diagram)
 - [Techinal Decision](#techinal-decision)
+
+## How to run project
+
+- [Download and Play](https://drive.google.com/file/d/1Z__xrLDYNwXQD7PEeu7OCxx_P9n00tsq/view?usp=drive_link)
+or
+- Clone from github
+- Open "StartScene" at Assets/Scenes/StartScene.unity
+![Start Scene](document/img/startscene.png)
 
 ## Extra features
 

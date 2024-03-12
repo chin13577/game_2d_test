@@ -15,11 +15,11 @@ Accepted.
 
 ### Issue
 We need to create the easiest way for game designer,who need to config Character's status parameter.
-if we create the datasheet. 
+
 
 ## Discussion
 
-it lead to waste device memory if we create datasheet as text files and hard to adjust.
+if we create the datasheet, it will lead to waste device memory if we create datasheet as text files and hard to adjust the parameters.
 
 
 ## Solution
