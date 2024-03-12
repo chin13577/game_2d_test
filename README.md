@@ -31,6 +31,9 @@ Assets/Bundles/Data/GameConfig.asset
 You can Adjust on inspector.
 ![Config](document/img/config.jpg)
 
+**Note
+"x" in Formula represent to Level of character.
+
 ## Class diagram
 ![Class Diagram](document/img/class-diagram.png)
 
