@@ -180,7 +180,6 @@ MonoBehaviour:
   button: {fileID: 33569075}
   text: {fileID: 1455236684}
   sfxKey: 
-  audioSource: {fileID: 0}
 --- !u!114 &33569075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,7 +1041,6 @@ MonoBehaviour:
   button: {fileID: 577130556}
   text: {fileID: 1800921925}
   sfxKey: 
-  audioSource: {fileID: 0}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2363,7 +2361,6 @@ MonoBehaviour:
   button: {fileID: 1622141674}
   text: {fileID: 1677701814}
   sfxKey: 
-  audioSource: {fileID: 0}
 --- !u!1 &1647812541
 GameObject:
   m_ObjectHideFlags: 0
@@ -3009,7 +3006,6 @@ MonoBehaviour:
   button: {fileID: 1985833549}
   text: {fileID: 559247857}
   sfxKey: 
-  audioSource: {fileID: 0}
 --- !u!1 &2058958746
 GameObject:
   m_ObjectHideFlags: 0
