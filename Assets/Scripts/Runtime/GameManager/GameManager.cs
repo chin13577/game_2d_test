@@ -14,6 +14,9 @@ namespace FS
         public CharacterFactory CharacterFactory { get => _characterFactory; }
         [SerializeField] private CharacterFactory _characterFactory;
 
+        public CharacterSpawner CharacterSpawner { get => _characterSpawner; }
+        [SerializeField] private CharacterSpawner _characterSpawner;
+
         public UIManager UIManager { get => _uiManager; }
         [SerializeField] private UIManager _uiManager;
 
@@ -41,8 +44,9 @@ namespace FS
 
         void Start()
         {
-            CharacterFactory.Init();
             BoardManager.Init();
+            CharacterFactory.Init();
+            CharacterSpawner.Init(this);
             ChangeState(GameState.PREPARE);
         }
 
@@ -83,6 +87,36 @@ namespace FS
         public void OnPlayerMove()
         {
             DataManager.Instance.UpdateTurn();
+        }
+
+        public List<Character> RandomSpawnCharacterList(List<SlotInfo> emptySlotList, Team team, int amount)
+        {
+            List<Character> result = new List<Character>();
+            for (int i = 0; i < amount; i++)
+            {
+                Character character = RandomSpawnCharacter(emptySlotList, team);
+                if (character != null)
+                {
+                    result.Add(character);
+                }
+            }
+            return result;
+        }
+
+        public Character RandomSpawnCharacter(List<SlotInfo> emptySlotList, Team team)
+        {
+            if (emptySlotList.Count == 0)
+                return null;
+
+            SlotInfo slot = emptySlotList[0];
+            emptySlotList.RemoveAt(0);
+
+            Character character = team == Team.PLAYER ? CharacterFactory.GetHero() : CharacterFactory.GetMonster();
+            character.Init();
+            character.CurrentPosition = slot.WorldPos;
+            slot.SetObject(character);
+
+            return character;
         }
 
     }

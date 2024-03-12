@@ -35,7 +35,7 @@ namespace FS
             List<SlotInfo> emptySlotList = _boardManager.BoardData.GetAllEmptySlots();
             emptySlotList.Shuffle();
 
-            Character hero = RandomSpawnCharacter(emptySlotList, Team.PLAYER);
+            Character hero = _manager.RandomSpawnCharacter(emptySlotList, Team.PLAYER);
             //TODO: remove this line. it just for debug.
             hero.sprite.color = Color.green;
             hero.name = "head";
@@ -43,14 +43,10 @@ namespace FS
 
             _manager.Camera.FollowTarget(hero.transform);
 
-            for (int i = 0; i < 5; i++)
-            {
-                RandomSpawnCharacter(emptySlotList, Team.PLAYER);
-            }
-            for (int i = 0; i < 5; i++)
-            {
-                RandomSpawnCharacter(emptySlotList, Team.ENEMY);
-            }
+            int initHeroAmount = DataManager.Instance.Config.InitSpawnHeroCount;
+            _manager.RandomSpawnCharacterList(emptySlotList, Team.PLAYER, initHeroAmount);
+            int initEnemyAmount = DataManager.Instance.Config.InitSpawnMonsterCount;
+            _manager.RandomSpawnCharacterList(emptySlotList, Team.ENEMY, initEnemyAmount);
 
             StartScreenUI startScreenUI = this._uiManager.StartScreenUI;
             startScreenUI.Show();
@@ -64,18 +60,5 @@ namespace FS
         {
             Debug.Log("OnExit PrepareState");
         }
-        private Character RandomSpawnCharacter(List<SlotInfo> emptySlotList, Team team)
-        {
-            SlotInfo slot = emptySlotList[0];
-            emptySlotList.RemoveAt(0);
-
-            Character character = team == Team.PLAYER ? _manager.CharacterFactory.GetHero() : _manager.CharacterFactory.GetMonster();
-            character.Init();
-            character.CurrentPosition = slot.WorldPos;
-            slot.SetObject(character);
-
-            return character;
-        }
-
     }
 }

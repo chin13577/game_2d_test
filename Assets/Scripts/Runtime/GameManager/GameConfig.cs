@@ -26,4 +26,7 @@ public class GameConfig : ScriptableObject
 
     public List<SpawnWeightData> SpawnMonsterWeightList = new List<SpawnWeightData>();
     public List<SpawnWeightData> SpawnHeroWeightList = new List<SpawnWeightData>();
+
+    public float SpawnMonsterLevelMultiplier = 0.8f;
+    public float SpawnHeroLevelMultiplier = 0.8f;
 }

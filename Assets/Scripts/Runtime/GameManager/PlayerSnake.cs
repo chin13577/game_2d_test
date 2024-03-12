@@ -63,6 +63,20 @@ namespace FS
             this._boardData = this._boardManager.BoardData;
         }
 
+        public int GetHighestLevel()
+        {
+            int result = 1;
+            for (int i = 0; i < this.characterList.Count; i++)
+            {
+                int level = this.characterList[i].Status.Level;
+                if (level > result)
+                {
+                    result = level;
+                }
+            }
+            return result;
+        }
+
         public void SetOnUpdateHead(Action<Character> callback)
         {
             OnUpdateHead = callback;

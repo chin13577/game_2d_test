@@ -1,4 +1,5 @@
 using FS;
+using FS.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +24,29 @@ public class DataManager
     public Monster CurrentEnemy { get => _currentEnemy; }
     private Monster _currentEnemy;
 
+    public GameConfig Config { get; private set; }
+    public RandomWeight<int> HeroSpawnWeight { get; private set; }
+    public RandomWeight<int> EnemySpawnWeight { get; private set; }
+
     private int _turn = 0;
+
+    public void SetConfig(GameConfig config)
+    {
+        this.Config = config;
+        HeroSpawnWeight = GenerateCharacterRandomWeight(config.SpawnHeroWeightList);
+        EnemySpawnWeight = GenerateCharacterRandomWeight(config.SpawnMonsterWeightList);
+    }
+
+    private RandomWeight<int> GenerateCharacterRandomWeight(List<SpawnWeightData> weightList)
+    {
+        RandomWeight<int> spawnWeight = new RandomWeight<int>();
+        for (int i = 0; i < weightList.Count; i++)
+        {
+            SpawnWeightData spawnWeightData = weightList[i];
+            spawnWeight.AddItem(spawnWeightData.SpawnAmount, spawnWeightData.Weight);
+        }
+        return spawnWeight;
+    }
 
     public void SetCurrentBattleEnemy(Monster enemy)
     {
