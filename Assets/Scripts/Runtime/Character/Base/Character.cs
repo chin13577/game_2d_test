@@ -94,13 +94,8 @@ namespace FS
 
         private void GameManager_OnUpdateTurn(int currentTurn)
         {
-            //TODO: set 0.5 as config.
-            int expGain = this._owner == null ? 1 : Math.Ceiling(this._owner.Count * 0.5f).ToInt32();
+            int expGain = this._owner == null ? 1 : Math.Ceiling(this._owner.Count * DataManager.Instance.Config.ExpMultiplier).ToInt32();
 
-            if (Status.EXP + expGain >= Status.MaxEXP)
-            {
-                //TODO: show level up.
-            }
             Status.EXP += expGain;
             OnStatusUpdate?.Invoke(Status);
         }
@@ -114,7 +109,6 @@ namespace FS
 
         public DamageData GetDamageData()
         {
-            //TODO: handle critical.
             bool isCritical = false;
             DamageData damageData = new DamageData()
             {

@@ -9,7 +9,6 @@ public class ResultUI : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _resultText;
 
-    //TODO: set result.
     public void Show()
     {
         gameObject.SetActive(true);

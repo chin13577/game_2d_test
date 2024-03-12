@@ -98,7 +98,6 @@ namespace FS
             Character character = Head;
             SlotInfo currentSlot = this._boardData.GetSlotFromPosition(character.CurrentPosition);
             currentSlot.Clear();
-            //TODO: implement pooling.
             character.gameObject.SetActive(false);
             characterList.RemoveFirst();
 

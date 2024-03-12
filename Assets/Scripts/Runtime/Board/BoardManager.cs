@@ -59,7 +59,6 @@ namespace FS
         [ContextMenu("TestDebugPosition")]
         public void DebugTilePosition()
         {
-            //TODO: wait for delete;
             Vector3 pos = _boardData.GetCenterTilePosition(this._debugX, this._debugY);
             Debug.Log(pos.x + " " + pos.y);
         }
