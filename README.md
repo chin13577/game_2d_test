@@ -15,7 +15,7 @@ You can Adjust on inspector.
 ![Config](document/img/config.jpg)
 
 ## Class diagram
-![Class Diagram](document/img/class-diagram.jpg)
+![Class Diagram](document/img/class-diagram.png)
 
 class diagram:
 https://drive.google.com/file/d/1GS3m6tgXnBQ4GNG9-y2y1dQ9jqYQwCy_/view?usp=drive_link
