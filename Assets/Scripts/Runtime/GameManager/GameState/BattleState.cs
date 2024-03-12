@@ -69,14 +69,10 @@ namespace FS
                 // player attack
                 DamageData playerDamage = _player.GetDamageData();
                 _enemy.TakeDamage(playerDamage, _player);
-                //TODO: spawn DamangeText.
-                //if critical -> show damage critical.
 
                 // enemey attack.
                 DamageData enemyDamage = _enemy.GetDamageData();
                 _player.TakeDamage(enemyDamage, _enemy);
-                //TODO: spawn DamangeText.
-                //if critical -> show damage critical.
 
             }
 
@@ -111,7 +107,6 @@ namespace FS
         {
             SlotInfo currentSlot = this._boardData.GetSlotFromPosition(_enemy.CurrentPosition);
             currentSlot.Clear();
-            //TODO: implement pooling.
             _enemy.gameObject.SetActive(false);
         }
     }
