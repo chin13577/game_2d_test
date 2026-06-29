@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.Rendering.Universal;
 
 namespace FS
 {
@@ -14,7 +12,6 @@ namespace FS
         private Bounds _cameraBound = new Bounds();
         [SerializeField]
         private float smoothTime;
-
         [SerializeField] private PixelPerfectCamera _pixelCamera;
         [SerializeField]
         private Transform target;
